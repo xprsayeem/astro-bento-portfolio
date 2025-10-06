@@ -1,37 +1,58 @@
 ---
-import { getCurrentTimeInItaly, formatTimeForItaly } from "../lib/helpers";
-import Card from "./Card/index.astro";
+import { formatTimeForCanada } from "../lib/helpers";
+
+interface Props {
+  label?: string;
+  timeZone?:
+    | "America/Toronto"
+    | "America/Vancouver"
+    | "America/Edmonton"
+    | "America/Winnipeg"
+    | "America/Halifax"
+    | "America/St_Johns";
+  hour12?: boolean;
+}
+const { label = "Local time", timeZone = "America/Toronto", hour12 = true } = Astro.props;
+const initial = formatTimeForCanada(new Date(), timeZone, hour12);
 ---
 
-<script>
-  import { onCleanup, onMount } from "solid-js";
-  import { formatTimeForItaly } from "../lib/helpers";
-
-  let interval: ReturnType<typeof setInterval>;
-
-  function updateClock() {
-    const timeDisplay = document.getElementById("timeDisplay");
-    const now = new Date();
-
-    if (timeDisplay) {
-      timeDisplay.textContent = formatTimeForItaly(now);
-      timeDisplay.setAttribute("datetime", now.toISOString());
-    }
-  }
-
-  onMount(() => {
-    interval = setInterval(updateClock, 1000);
-  });
-
-  onCleanup(() => {
-    clearInterval(interval);
-  });
-</script>
-
-<Card colSpan="lg:col-span-2" rowSpan="md:row-span-2" title="Time zone">
+<div class="h-full w-full p-3 text-neutral-100 flex flex-col">
+  <p class="text-xs text-neutral-400">{label}</p>
   <time
-    class="text-2xl xl:text-5xl xl:whitespace-nowrap w-50 xl:w-100 h-[calc(100%-28px)] font-serif flex justify-center items-center"     datetime=""     id="timeDisplay"
+    id="tz-time"
+    class="mt-1 block text-3xl md:text-4xl xl:text-5xl xl:whitespace-nowrap w-full flex-1 font-serif flex justify-center items-center tabular-nums"
+    datetime={new Date().toISOString()}
+    data-tz={timeZone}
+    data-hour12={hour12 ? "true" : "false"}
+    suppressHydrationWarning
   >
-    {formatTimeForItaly(getCurrentTimeInItaly())}
+    {initial}
   </time>
-</Card>
+</div>
+
+<script is:inline>
+  const el = document.getElementById("tz-time");
+  if (el) {
+    const tz = el.getAttribute("data-tz") || "America/Toronto";
+    const hour12 = (el.getAttribute("data-hour12") || "true") === "true";
+
+    const fmt = new Intl.DateTimeFormat("en-CA", {
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12,
+      timeZone: tz,
+      timeZoneName: "short",
+    });
+
+    function tick() {
+      const now = new Date();
+      el.textContent = fmt.format(now);
+      el.setAttribute("datetime", now.toISOString());
+    }
+
+    tick();
+    const id = setInterval(tick, 1000);
+    window.addEventListener("beforeunload", () => clearInterval(id));
+  }
+</script>

@@ -1,40 +1,40 @@
-export function trimText(input: string, maxLength: number = 100): string {
-  if (input.length <= maxLength) return input;
-  return input.substring(0, maxLength - 3) + "...";
+export function trimText(input: string, maxLength = 100): string {
+  const chars = Array.from(input); // avoids splitting surrogate pairs
+  if (chars.length <= maxLength) return input;
+  return chars.slice(0, Math.max(0, maxLength - 1)).join("") + "…";
 }
 export function getCurrentTimeInItaly(): Date {
   // Create a date object with the current UTC time
   const now = new Date();
 
-  // Convert the UTC time to Italy's time
-  const offsetItaly = 2; // Italy is in Central European Summer Time (UTC+2), but you might need to adjust this based on Daylight Saving Time
+  // Convert the UTC time to Toronto's time
+  const offsetItaly = -4; // Toronto is UTC -4
   now.setHours(now.getUTCHours() + offsetItaly);
 
   return now;
 }
 
-export function formatTimeForItaly(date: Date): string {
-  const options: Intl.DateTimeFormatOptions = {
+// Returns a formatted time string in the given Canadian timezone (default Toronto).
+export function formatTimeForCanada(
+  date: Date = new Date(),
+  timeZone: "America/Toronto" | "America/Vancouver" | "America/Edmonton" | "America/Winnipeg" | "America/Halifax" | "America/St_Johns" = "America/Toronto",
+  hour12 = true
+): string {
+  return new Intl.DateTimeFormat("en-CA", {
     hour: "numeric",
     minute: "2-digit",
     second: "2-digit",
-    hour12: true, // This will format the time in 12-hour format with AM/PM
-    timeZone: "Europe/Rome",
-  };
-
-  let formattedTime = new Intl.DateTimeFormat("en-US", options).format(date);
-
-  // Append the time zone abbreviation. You can automate this with libraries like `moment-timezone`.
-  // For simplicity, here I'm just appending "CET", but do remember that Italy switches between CET and CEST.
-  formattedTime += " CET";
-
-  return formattedTime;
+    hour12,
+    timeZone,
+    timeZoneName: "short", // gives EST/EDT automatically
+  }).format(date);
 }
 
+// src/lib/helpers.ts
 export function formatDate(date: Date): string {
-  return date.toLocaleDateString("en-US", {
+  return new Intl.DateTimeFormat("en-CA", {
     year: "numeric",
     month: "long",
     day: "numeric",
-  });
+  }).format(date);
 }
