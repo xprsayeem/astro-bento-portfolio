@@ -1,0 +1,783 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card/index.astro";
+---
+<!-- Motion animation (unchanged) -->
+<script>
+  import { stagger, animate, type AnimationSequence } from "motion";
+  import { loaderAnimation } from "../lib/constants";
+
+  const cards = document.querySelectorAll(".card");
+
+  const sequence = [
+    loaderAnimation,
+    [
+      cards,
+      { y: ["40%", "0%"], opacity: [0, 1] },
+      {
+        type: "spring",
+        at: "-0.1",
+        delay: stagger(0.3),
+      },
+    ],
+  ];
+
+  animate(sequence as AnimationSequence);
+</script>
+
+<!-- Chart.js via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Client code: fetch CSVs, draw charts, fill table -->
+<script type="module">
+  // ---------- utils ----------
+  const fmtPct = (x, dp = 1) =>
+    (Number(x) || 0).toLocaleString(undefined, { style: "percent", minimumFractionDigits: dp, maximumFractionDigits: dp });
+  const fmtInt = (x) => (Number(x) || 0).toLocaleString();
+  const by = (arr, keyFn) => arr.reduce((m, r) => ((m[keyFn(r)] ??= []).push(r), m), {});
+  const sum = (arr, sel) => arr.reduce((a, r) => a + (Number(sel ? r[sel] : r) || 0), 0);
+  const uniq = (arr) => [...new Set(arr)];
+  const ascNum = (a, b) => Number(a) - Number(b);
+  const descNum = (a, b) => Number(b) - Number(a);
+
+  function parseCSV(text) {
+    // simple CSV parser for clean files
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines[0].split(",").map((h) => h.trim());
+    return lines.slice(1).map((row) => {
+      const cols = row.split(",");
+      const obj = {};
+      headers.forEach((h, i) => (obj[h] = (cols[i] ?? "").trim()));
+      return obj;
+    });
+  }
+  async function loadCSV(path) {
+    const res = await fetch(path, { cache: "no-cache" });
+    if (!res.ok) throw new Error(`Failed to load ${path}`);
+    const txt = await res.text();
+    return parseCSV(txt);
+  }
+  function latestYear(rows, col="Year") {
+    return String(Math.max(...rows.map(r => Number(r[col] || 0))));
+  }
+
+  // chart factory with sensible defaults
+  function mkChart(canvasId, cfg) {
+    const el = document.getElementById(canvasId);
+    if (!el) return null;
+    const ctx = el.getContext("2d");
+    return new Chart(ctx, cfg);
+  }
+
+  // ---------- data loaders ----------
+  const PATHS = {
+    totals: "/data/totals_by_year_type.csv",
+    breedShare: "/data/breed_share_citywide_all_years.csv",
+    breedStats: "/data/breed_stats.csv",
+    daily: "/data/daily_stats.csv",
+    top3Fsa: "/data/top3_breed_by_fsa.csv",
+    // optional; if not present we hide the health section
+    health: "/data/gold_health.csv",
+  };
+
+  // ---------- KPIs ----------
+  async function drawKPIs() {
+    const totals = await loadCSV(PATHS.totals);
+    const ly = latestYear(totals);
+    const py = String(Number(ly) - 1);
+
+    const byTypeYear = by(totals, r => `${r.ANIMAL_TYPE}|${r.Year}`);
+    const get = (t, y) => Number((byTypeYear[`${t}|${y}`]?.[0] || {}).total_count || 0);
+
+    const catNow = get("CAT", ly);
+    const dogNow = get("DOG", ly);
+    const catPrev = get("CAT", py);
+    const dogPrev = get("DOG", py);
+
+    // top breed share from breedShare
+    const shareRows = await loadCSV(PATHS.breedShare);
+    const latestShare = shareRows.filter(r => r.Year === ly);
+    const catTopShare = Math.max(...latestShare.filter(r => r.ANIMAL_TYPE === "CAT").map(r => Number(r.share) || 0));
+    const dogTopShare = Math.max(...latestShare.filter(r => r.ANIMAL_TYPE === "DOG").map(r => Number(r.share) || 0));
+
+    // last processed ts from health (optional)
+    let lastTs = "";
+    try {
+      const health = await loadCSV(PATHS.health);
+      const latestHealth = health.filter(r => r.Year === ly);
+      lastTs = latestHealth.map(r => r.last_processed_ts).sort().slice(-1)[0] || "";
+    } catch { /* optional */ }
+
+    const kpis = [
+      { label: `Cats ${ly}`, value: fmtInt(catNow), sub: `YoY ${((catNow - catPrev) / (catPrev || 1)).toLocaleString(undefined, { style: "percent", minimumFractionDigits: 1, maximumFractionDigits: 1 })}` },
+      { label: `Dogs ${ly}`, value: fmtInt(dogNow), sub: `YoY ${((dogNow - dogPrev) / (dogPrev || 1)).toLocaleString(undefined, { style: "percent", minimumFractionDigits: 1, maximumFractionDigits: 1 })}` },
+      { label: `Top Cat breed share`, value: fmtPct(catTopShare || 0), sub: ly },
+      { label: `Top Dog breed share`, value: fmtPct(dogTopShare || 0), sub: ly },
+      { label: `Last processed`, value: lastTs ? new Date(lastTs).toLocaleString() : "n/a", sub: "Gold health" },
+    ];
+
+    const box = document.getElementById("kpiBox");
+    box.innerHTML = "";
+    kpis.forEach(k => {
+      const div = document.createElement("div");
+      div.className = "rounded-xl bg-white/5 border border-white/10 p-3";
+      div.innerHTML = `
+        <div class="text-[11px] text-neutral-400">${k.label}</div>
+        <div class="text-lg font-semibold">${k.value}</div>
+        <div class="text-[11px] text-neutral-400">${k.sub}</div>
+      `;
+      box.appendChild(div);
+    });
+  }
+
+  // ---------- Sparklines (7 days) ----------
+  async function drawSparklines() {
+    const rows = await loadCSV(PATHS.daily);
+    const byType = by(rows, r => r.ANIMAL_TYPE);
+    ["CAT", "DOG"].forEach(t => {
+      const seq = (byType[t] || [])
+        .map(r => ({ x: r.day, y: Number(r.total || 0) }))
+        .sort((a, b) => a.x.localeCompare(b.x))
+        .slice(-7);
+      mkChart(`spark_${t}`, {
+        type: "line",
+        data: { datasets: [{ data: seq, tension: 0.3, pointRadius: 0 }] },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          scales: { x: { display: false }, y: { display: false } },
+          plugins: { legend: { display: false }, tooltip: { intersect: false, callbacks: { label: (ctx) => fmtInt(ctx.parsed.y) } } }
+        }
+      });
+    });
+  }
+
+  // ---------- Clustered totals by year & type ----------
+  async function drawClusteredTotals() {
+    const rows = await loadCSV(PATHS.totals);
+    const years = uniq(rows.map(r => r.Year)).sort(ascNum);
+    const types = ["CAT", "DOG"].filter(t => rows.some(r => r.ANIMAL_TYPE === t));
+    const datasets = types.map((t, i) => ({
+      label: t,
+      data: years.map(y => Number(rows.find(r => r.Year === y && r.ANIMAL_TYPE === t)?.total_count || 0)),
+      borderWidth: 1
+    }));
+    mkChart("chartTotalsClustered", {
+      type: "bar",
+      data: { labels: years, datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { label: (ctx) => ` ${fmtInt(ctx.parsed.y)}` } } },
+        scales: { x: { stacked: false }, y: { beginAtZero: true } }
+      }
+    });
+  }
+
+  // ---------- 100% stacked bars: Top3 vs Other per year/type ----------
+  async function drawTop3Stacked() {
+    const stats = await loadCSV(PATHS.breedStats); // needs rank_in_year_type and share per row
+    const years = uniq(stats.map(r => r.Year)).sort(ascNum);
+    const types = ["CAT", "DOG"].filter(t => stats.some(r => r.Animal_Type === t));
+    const top3 = (y, t) => {
+      const subset = stats.filter(r => r.Year === y && r.Animal_Type === t).sort((a,b) => Number(a.rank_in_year_type||999) - Number(b.rank_in_year_type||999));
+      const shareTop3 = sum(subset.slice(0, 3), "share");
+      return { top3: shareTop3, other: Math.max(0, 1 - shareTop3) };
+    };
+    const labels = years.flatMap(y => types.map(t => `${y} ${t}`));
+    const topData = [], otherData = [];
+    years.forEach(y => types.forEach(t => {
+      const { top3: s, other: o } = top3(y, t);
+      topData.push(s); otherData.push(o);
+    }));
+    mkChart("chartTop3Stacked", {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          { label: "Top 3", data: topData },
+          { label: "Other", data: otherData }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: "bottom" },
+          tooltip: { callbacks: { label: (ctx) => ` ${fmtPct(ctx.raw)}` } }
+        },
+        scales: {
+          x: { stacked: true },
+          y: { stacked: true, beginAtZero: true, max: 1, ticks: { callback: v => fmtPct(v, 0) } }
+        }
+      }
+    });
+  }
+
+  // ---------- Pareto latest year with cumulative line (toggle type) ----------
+  async function drawPareto() {
+    const stats = await loadCSV(PATHS.breedStats);
+    const years = uniq(stats.map(r => Number(r.Year))).sort(ascNum);
+    const ly = String(years[years.length - 1]);
+    const types = ["DOG", "CAT"].filter(t => stats.some(r => r.Animal_Type === t));
+
+    function render(type) {
+      const subset = stats.filter(r => r.Year === ly && r.Animal_Type === type)
+        .map(r => ({ breed: r.breed, cnt: Number(r.cnt || 0) }))
+        .sort((a,b) => descNum(a.cnt, b.cnt));
+      const top = subset.slice(0, 20); // keep readable
+      const labels = top.map(r => r.breed);
+      const counts = top.map(r => r.cnt);
+      const cum = counts.reduce((acc, v, i) => (acc.push(((sum(counts.slice(0, i+1))) / (sum(counts) || 1))), acc), []);
+      mkChart("chartPareto", {
+        type: "bar",
+        data: { labels, datasets: [
+          { type: "bar", label: `${type} count`, data: counts, yAxisID: "y" },
+          { type: "line", label: "cumulative", data: cum, yAxisID: "y1", tension: 0.25, pointRadius: 2 }
+        ]},
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { label: (ctx) => ctx.dataset.type === "line" ? ` ${fmtPct(ctx.raw,1)}` : ` ${fmtInt(ctx.raw)}` } } },
+          scales: {
+            y: { beginAtZero: true, title: { display: true, text: "count" } },
+            y1: { beginAtZero: true, position: "right", max: 1, grid: { drawOnChartArea: false }, ticks: { callback: v => fmtPct(v,0) } }
+          }
+        }
+      });
+    }
+
+    // initial and buttons
+    render(types[0] || "CAT");
+    const btns = document.querySelectorAll("[data-pareto-type]");
+    btns.forEach(b => b.addEventListener("click", () => {
+      const c = Chart.getChart("chartPareto"); if (c) c.destroy();
+      render(b.dataset.paretoType);
+    }));
+  }
+
+  // ---------- Donut top 5 Dogs latest ----------
+// ---------- Donut top 5 by type (toggle, default DOG) ----------
+    let donutChart = null;
+
+    async function drawDonut() {
+    const stats = await loadCSV(PATHS.breedStats);
+    const ly = latestYear(stats);
+
+    function top5For(type) {
+        const rows = stats
+        .filter(r => r.Year === ly && r.Animal_Type === type)
+        .sort((a, b) => descNum(a.share, b.share));
+        const top5 = rows.slice(0, 5);
+        const other = Math.max(0, 1 - sum(top5, "share"));
+        return {
+        labels: [...top5.map(r => r.breed), "Other"],
+        data:   [...top5.map(r => Number(r.share || 0)), other],
+        title:  `${type} top 5 composition (${ly})`,
+        };
+    }
+
+    function render(type = "DOG") {
+        const { labels, data } = top5For(type);
+        const id = "chartDonut"; // single canvas for both
+        const existing = Chart.getChart(id);
+        if (existing) existing.destroy();
+
+        donutChart = mkChart(id, {
+        type: "doughnut",
+        data: { labels, datasets: [{ data }] },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+            legend: { position: "right" },
+            tooltip: { callbacks: { label: (ctx) => ` ${fmtPct(ctx.raw)}` } },
+            title: { display: true, text: `Top 5 ${type} breeds composition (2025)` }
+            },
+            cutout: "55%"
+        }
+        });
+    }
+
+    // initial render
+    render("DOG");
+
+    // wire up toggle buttons
+    document.querySelectorAll("[data-donut-type]").forEach(btn => {
+        btn.addEventListener("click", () => {
+        const t = btn.dataset.donutType;
+        render(t);
+        });
+    });
+    }
+
+
+  // ---------- Bump chart (rank) top 10 per type ----------
+  async function drawBump() {
+    const stats = await loadCSV(PATHS.breedStats);
+    const years = uniq(stats.map(r => Number(r.Year))).sort(ascNum);
+    const types = ["CAT", "DOG"];
+    function render(type) {
+      // top 10 in latest by rank
+      const ly = String(Math.max(...years));
+      const top10 = stats
+        .filter(r => r.Year === ly && r.Animal_Type === type && r.rank_in_year_type)
+        .sort((a,b)=> Number(a.rank_in_year_type) - Number(b.rank_in_year_type))
+        .slice(0,10)
+        .map(r => r.breed);
+
+      const series = top10.map(breed => {
+        const pts = years.map(y => {
+          const row = stats.find(r => r.Year === String(y) && r.Animal_Type === type && r.breed === breed);
+          return { x: String(y), y: row ? Number(row.rank_in_year_type) : null };
+        });
+        return { label: breed, data: pts };
+      });
+
+      mkChart(`chartBump_${type}`, {
+        type: "line",
+        data: { datasets: series.map(s => ({ label: s.label, data: s.data, spanGaps: true, tension: 0.2, pointRadius: 2 })) },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y}` } } },
+          scales: {
+            x: { type: "category", labels: years.map(String) },
+            y: { reverse: true, ticks: { stepSize: 1 }, title: { display: true, text: "rank" }, min: 1 }
+          }
+        }
+      });
+    }
+    types.forEach(render);
+  }
+
+    // ---------- Dot plot: rank vs share (latest year) ----------
+    async function drawDotPlot() {
+    const stats = await loadCSV(PATHS.breedStats);
+    const ly = latestYear(stats); // e.g., "2025"
+
+    // helper builds scatter points for a type
+    function buildPoints(type) {
+    const EXCLUDE_CAT_BREEDS = new Set(["DOMESTIC SHORTHAIR", "DOMESTIC SHORT HAIR", "DSH"]);
+
+    // get rows for latest year + type, drop DSH for cats
+    const rows = stats
+        .filter(r =>
+        r.Year === ly &&
+        r.Animal_Type === type &&
+        r.rank_in_year_type &&
+        !(type === "CAT" && EXCLUDE_CAT_BREEDS.has(String(r.breed).toUpperCase()))
+        )
+        .map(r => ({
+        breed: r.breed,
+        rank: Number(r.rank_in_year_type),
+        share: Number(r.share || 0),
+        cnt: Number(r.cnt || 0)
+        }))
+        .sort((a, b) => a.rank - b.rank);
+
+    // bubble sizing reference: per-type, post-filter, capped at 90th percentile
+    const counts = rows.map(d => d.cnt || 0);
+    const ref = Math.max(q(counts, 0.90), 1); // try 0.90 or 0.95
+
+    // radius scale 4..18, clamp to the reference to avoid outliers
+    const rScale = (c) => {
+        const v = Math.min(c, ref) / ref;
+        return 4 + 14 * Math.sqrt(v);
+    };
+
+    return rows.map(d => ({
+        x: d.rank,
+        y: d.share,
+        r: rScale(d.cnt),
+        breed: d.breed,
+        cnt: d.cnt
+    }));
+    }
+
+
+
+    // dynamic y max with small headroom, cap to 0.15 for safety
+    const allShare = stats.filter(r => r.Year === ly).map(r => Number(r.share || 0));
+    const yMax = Math.min(.12, Math.max(...allShare, 0.01) * 1.1);
+
+    function render(type) {
+        const id = `chartDot_${type}`;
+        const existing = Chart.getChart(id);
+        if (existing) existing.destroy();
+
+        mkChart(id, {
+        type: "bubble",
+        data: { datasets: [{
+            label: `${type} ${ly}`,
+            data: buildPoints(type)
+        }]},
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                label: (ctx) => {
+                    const p = ctx.raw;
+                    return ` ${p.breed} • rank ${p.x} • ${fmtPct(p.y)} • ${fmtInt(p.cnt)} licenses`;
+                }
+                }
+            }
+            },
+            scales: {
+            x: {
+                title: { display: true, text: "rank" },
+                type: "linear",
+                beginAtZero: false,
+                ticks: { stepSize: 1 },
+                min: 1
+            },
+            y: {
+                title: { display: true, text: "share" },
+                beginAtZero: true,
+                max: 0.12,
+                ticks: { callback: v => fmtPct(v, 0) }
+            }
+            }
+        }
+        });
+    }
+    // robust quantile for small arrays
+    function q(arr, p=0.95) {
+    if (!arr.length) return 1;
+    const a = [...arr].sort((x,y)=>x-y);
+    const idx = Math.min(a.length - 1, Math.max(0, Math.floor(p * (a.length - 1))));
+    return a[idx] || 1;
+    }
+
+
+    // initial render for both
+    ["CAT", "DOG"].forEach(render);
+
+    // toggle buttons
+    document.querySelectorAll("[data-dot-type]").forEach(btn => {
+        btn.addEventListener("click", () => {
+        const t = btn.dataset.dotType;
+        render(t);
+        });
+    });
+    }
+
+
+  // ---------- Health lollipop bars + micro cards ----------
+  async function drawHealth() {
+    try {
+      const health = await loadCSV(PATHS.health);
+      const years = uniq(health.map(r => r.Year)).sort(ascNum);
+      const labels = [];
+      const data = [];
+      const target = 0.995;
+      years.forEach(y => {
+        ["CAT","DOG"].forEach(t => {
+          const row = health.find(r => r.Year === y && r.ANIMAL_TYPE === t);
+          if (row) { labels.push(`${y} ${t}`); data.push(Number(row.pct_mapped || 0)); }
+        });
+      });
+      mkChart("chartHealth", {
+        type: "bar",
+        data: { labels, datasets: [{ label: "pct mapped", data }] },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            annotation: { annotations: { target: { type: "line", yMin: target, yMax: target, borderWidth: 1 } } },
+            tooltip: { callbacks: { label: (ctx) => ` ${fmtPct(ctx.raw, 2)}` } }
+          },
+          scales: { y: { beginAtZero: false, min: 0.98, max: 1, ticks: { callback: v => fmtPct(v,1) } } }
+        }
+      });
+
+      // micro cards for latest year
+      const ly = latestYear(health);
+      const latest = health.filter(r => r.Year === ly);
+      const box = document.getElementById("healthCards");
+      box.innerHTML = "";
+      latest.forEach(r => {
+        const div = document.createElement("div");
+        div.className = "rounded-xl bg-white/5 border border-white/10 p-3";
+        div.innerHTML = `
+          <div class="text-[11px] text-neutral-400">${r.ANIMAL_TYPE} ${r.Year}</div>
+          <div class="text-sm">rows: <b>${fmtInt(r.rows)}</b></div>
+          <div class="text-sm">mapped: <b>${fmtInt(r.mapped_rows)}</b> (${fmtPct(r.pct_mapped,2)})</div>
+          <div class="text-sm">null FSA: <b>${fmtInt(r.null_fsa_rows)}</b></div>
+          <div class="text-[11px] text-neutral-400 mt-1">${new Date(r.last_processed_ts).toLocaleString()}</div>
+        `;
+        box.appendChild(div);
+      });
+    } catch {
+      // hide section if file missing
+      const sec = document.getElementById("healthSection");
+      if (sec) sec.style.display = "none";
+    }
+  }
+
+  // ---------- Minimal preview table ----------
+// ---------- Minimal preview table (filtered: Year=2025, DOG, no null/zero cols) ----------
+async function fillPreviewTable() {
+  const rows = await loadCSV(PATHS.top3Fsa);
+  const body = document.getElementById("previewBody");
+  body.innerHTML = "";
+
+  const notNull = (v) =>
+    v !== undefined &&
+    v !== null &&
+    String(v).trim() !== "" &&
+    String(v).toLowerCase() !== "null";
+
+  const pos = (v) => Number(v) > 0;
+
+  const filtered = rows.filter((r) =>
+    String(r.Year) === "2025" &&
+    (r.Animal_Type || r.ANIMAL_TYPE || "").toUpperCase() === "DOG" &&
+    notNull(r.FSA) &&
+    notNull(r.top1_breed) && pos(r.top1_cnt) &&
+    notNull(r.top2_breed) && pos(r.top2_cnt) &&
+    notNull(r.top3_breed) && pos(r.top3_cnt)
+  );
+
+  filtered.slice(0, 8).forEach((r) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="px-2 py-1 text-xs">${r.Year}</td>
+      <td class="px-2 py-1 text-xs">${r.Animal_Type}</td>
+      <td class="px-2 py-1 text-xs">${r.FSA}</td>
+      <td class="px-2 py-1 text-xs">${r.top1_breed} (${fmtInt(r.top1_cnt)})</td>
+      <td class="px-2 py-1 text-xs">${r.top2_breed} (${fmtInt(r.top2_cnt)})</td>
+      <td class="px-2 py-1 text-xs">${r.top3_breed} (${fmtInt(r.top3_cnt)})</td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+
+  // ---------- boot ----------
+  window.addEventListener("DOMContentLoaded", async () => {
+    await Promise.all([
+      drawKPIs(),
+      drawSparklines(),
+      drawClusteredTotals(),
+      drawTop3Stacked(),
+      drawPareto(),
+      drawDonut(),
+      drawBump(),
+      drawDotPlot(),
+      drawHealth(),
+      fillPreviewTable(),
+    ]);
+  });
+</script>
+
+<Layout
+  title="Projects"
+  description="Selected projects with lightweight, browser friendly artifacts."
+  showLoader>
+    
+  <main class="text-white m-auto p-2 max-w-6xl overflow-visible relative w-full sm:p-4 md:p-6 lg:p-8 space-y-8">
+    <!-- Top nav: Back + Home -->
+    <nav class="w-full sticky top-0 z-40 mb-3">
+    <div class="flex gap-2">
+        <button
+        type="button"
+        onclick="history.back()"
+        class="px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 text-sm hover:bg-white/10 active:scale-[0.99] transition"
+        aria-label="Go back"
+        >
+        ← Back
+        </button>
+    </div>
+    </nav>
+
+    <section class="!h-auto !overflow-visible">
+    <Card title="Certified Dogs and Cats!" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+      <div class="flex flex-col gap-6">
+        <p class="text-sm text-neutral-300">
+          I’m excited about this project. I ingest Toronto Open Data into AWS S3, catalog it in Unity Catalog, and model 
+          it as bronze, silver, and gold Delta tables in Databricks. Ingestion is daily and idempotent, with simple schema 
+          checks and deduping at the bronze level. Silver standardizes key values and dimensions, applies breed reference 
+          mappings, and enforces basic quality thresholds. Gold creates and updates compact SQL views that power the charts 
+          on this page. <br> <br>A lightweight Python script runs every morning to fetch new records from the Open Data API. 
+          Databricks Workflows orchestrates transformations and partitions in S3 for efficient reads, and optimizes 
+          with load control statistics and small file compaction. I track freshness and record coverage in a health view, 
+          including percent of records mapped to canonical breeds and valid FSAs. On the serving side, a weekly Databricks workflow exports 
+          CSV and JSON from the gold views to Github Actions, and Netlify serves them as static assets. The result is a fast, reliable, 
+          low-cost, stacked pipeline with clear lineage from source to chart.
+          <a class="underline" href="https://github.com/xprsayeem/Certified-Dogs-and-Cats" target="_blank" rel="noreferrer">GitHub</a>.
+        </p>
+
+        <!-- KPI tiles + tiny 7-day sparklines -->
+        <section class="flex flex-col gap-3">
+          <h3 class="text-sm font-semibold">At a glance</h3>
+          <div id="kpiBox" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2"></div>
+          <p class="text-xs text-neutral-400">
+             Last 7 days of new record ingestions per animal type from <code>daily_stats</code>. Higher points mean busier intake days.
+          </p>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="rounded-xl bg-white/5 border border-white/10 p-2">
+              <div class="text-xs text-neutral-400">7-day Cats</div>
+              <div class="h-16"><canvas id="spark_CAT"></canvas></div>
+            </div>
+            <div class="rounded-xl bg-white/5 border border-white/10 p-2">
+              <div class="text-xs text-neutral-400">7-day Dogs</div>
+              <div class="h-16"><canvas id="spark_DOG"></canvas></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Yearly scale and mix -->
+        <section class="flex flex-col gap-3">
+          <h3 class="text-sm font-semibold">Yearly scale and mix</h3>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <div class="rounded-xl bg-white/5 border border-white/10 p-2">
+              <div class="text-xs text-neutral-400">Totals by year and type</div>
+              <div class="h-64 sm:h-72 lg:h-72"><canvas id="chartTotalsClustered"></canvas></div>
+            </div>
+            <div class="rounded-xl bg-white/5 border border-white/10 p-2">
+              <div class="text-xs text-neutral-400">Top 3 breeds vs Other (100 percent basis)</div>
+              <div class="h-64 sm:h-72 lg:h-72"><canvas id="chartTop3Stacked"></canvas></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Breed composition -->
+        <section class="flex flex-col gap-3">
+          <h3 class="text-sm font-semibold">Breed composition</h3>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-2">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-neutral-400">Pareto, 2025</div>
+              <div class="flex gap-2">
+                <button data-pareto-type="DOG" class="text-xs underline">Dogs</button>
+                <button data-pareto-type="CAT" class="text-xs underline">Cats</button>
+              </div>
+            </div>
+            <div class="h-72 sm:h-80"><canvas id="chartPareto"></canvas></div>
+          </div>
+            <div class="rounded-xl bg-white/5 border border-white/10 p-2">
+            <div class="flex items-center justify-between">
+                <div class="text-xs text-neutral-400">Top 5 composition (2025)</div>
+                <div class="flex gap-2">
+                <button data-donut-type="DOG" class="text-xs underline">Dogs</button>
+                <button data-donut-type="CAT" class="text-xs underline">Cats</button>
+                </div>
+            </div>
+            <div class="h-64 sm:h-72"><canvas id="chartDonut"></canvas></div>
+            </div>
+        </section>
+
+        <!-- Rank and momentum -->
+        <section class="flex flex-col gap-3">
+          <h3 class="text-sm font-semibold">Breed rank and momentum</h3>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <div class="rounded-xl bg-white/5 border border-white/10 p-2">
+              <div class="text-xs text-neutral-400">Bump ranks, Cats (top 10 breeds in 2025)</div>
+              <div class="h-64 sm:h-72"><canvas id="chartBump_CAT"></canvas></div>
+            </div>
+            <div class="rounded-xl bg-white/5 border border-white/10 p-2">
+              <div class="text-xs text-neutral-400">Bump ranks, Dogs (top 10 breeds in 2025)</div>
+              <div class="h-64 sm:h-72"><canvas id="chartBump_DOG"></canvas></div>
+            </div>
+          </div>
+        </section>
+        <!-- Rank vs Share -->
+            <section class="flex flex-col gap-3">
+            <h3 class="text-sm font-semibold">Rank vs share</h3>
+            <p class="text-xs text-neutral-400">
+                Each dot is a breed of licensed pets in 2025. X is the breed's popularity rank, Y is the breed's share of the animal type, dot size scales with count.<br>Excludes Domestic Shorthair for readability. Full cat composition shown above in donut.
+            </p>
+            <div class="flex flex-col gap-3">
+                <div class="rounded-xl bg-white/5 border border-white/10 p-2">
+                <div class="flex items-center justify-between">
+                    <div class="text-[11px] text-neutral-400 mb-1">Cats</div>
+                    <button data-dot-type="CAT" class="text-xs underline">refresh</button>
+                </div>
+                <div class="h-64 sm:h-72 w-full"><canvas id="chartDot_CAT" class="w-full"></canvas></div>
+                </div>
+                <div class="rounded-xl bg-white/5 border border-white/10 p-2">
+                <div class="flex items-center justify-between">
+                    <div class="text-[11px] text-neutral-400 mb-1">Dogs</div>
+                    <button data-dot-type="DOG" class="text-xs underline">refresh</button>
+                </div>
+                <div class="h-64 sm:h-72 w-full"><canvas id="chartDot_DOG" class="w-full"></canvas></div>
+                </div>
+            </div>
+            </section>
+
+        <!-- Health -->
+        <section id="healthSection" class="flex flex-col gap-3">
+          <h3 class="text-sm font-semibold">Health and pipeline quality</h3>
+          <p class="text-xs text-neutral-400">
+             “Mapped” means the license's breed was matched to a canonical breed in my reference list. A small number stay unmapped when owners enter custom or very rare breeds, use misspellings or mixed breeds, or the value is missing. The target is 99.5%+ mapped.
+          </p>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-2">
+            <div class="text-[11px] text-neutral-400 mb-1">Percent mapped by year and animal type</div>
+            <div class="h-56 sm:h-64"><canvas id="chartHealth"></canvas></div>
+          </div>
+          <div id="healthCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2"></div>
+        </section>
+
+        <!-- Map embeds -->
+        <section class="flex flex-col gap-3">
+          <h3 class="text-sm font-semibold">Choropleths by FSA</h3>
+          <p class="text-xs text-neutral-400">
+            These maps show licensed pets by Forward Sortation Area using the latest gold view. 
+            Hover to see totals and top breeds per FSA. <br>Boundaries come from Statistics Canada FSA shapes filtered to Toronto. 
+          </p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <iframe
+              src="/data/fsa_pets_latest_CAT.html"
+              class="w-full h-[28rem] rounded-lg border border-white/10"
+              loading="lazy"
+              title="Licensed Cats by FSA"
+            ></iframe>
+            <iframe
+              src="/data/fsa_pets_latest_DOG.html"
+              class="w-full h-[28rem] rounded-lg border border-white/10"
+              loading="lazy"
+              title="Licensed Dogs by FSA"
+            ></iframe>
+          </div>
+        </section>
+
+        <!-- Preview table -->
+        <section class="flex flex-col gap-2">
+          <h3 class="text-sm font-semibold">Top 3 breeds by FSA (preview)</h3>
+          <div class="overflow-x-auto rounded-lg border border-white/10">
+            <table class="min-w-full text-left">
+              <thead class="bg-white/5">
+                <tr>
+                  <th class="px-2 py-1 text-xs font-medium">Year</th>
+                  <th class="px-2 py-1 text-xs font-medium">Type</th>
+                  <th class="px-2 py-1 text-xs font-medium">FSA</th>
+                  <th class="px-2 py-1 text-xs font-medium">Top 1</th>
+                  <th class="px-2 py-1 text-xs font-medium">Top 2</th>
+                  <th class="px-2 py-1 text-xs font-medium">Top 3</th>
+                </tr>
+              </thead>
+              <tbody id="previewBody"></tbody>
+            </table>
+          </div>
+          <p class="text-xs text-neutral-400">
+            Source files:
+            <a class="underline" href="/data/totals_by_year_type.csv">totals_by_year_type.csv</a>,
+            <a class="underline" href="/data/breed_stats.csv">breed_stats.csv</a>,
+            <a class="underline" href="/data/breed_share_citywide_all_years.csv">breed_share_citywide_all_years.csv</a>,
+            <a class="underline" href="/data/daily_stats.csv">daily_stats.csv</a>,
+            <a class="underline" href="/data/top3_breed_by_fsa.csv">top3_breed_by_fsa.csv</a>,
+            <a class="underline" href="/data/gold_health.csv">gold_health.csv</a>
+          </p>
+        </section>
+
+        <div class="mt-2 flex flex-wrap gap-2">
+          <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">Databricks</span>
+          <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">SQL</span>
+          <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">PySpark</span>
+          <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">AWS S3</span>
+          <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">Astro</span>
+        </div>
+      </div>
+    </Card>
+    </section>
+  </main>
+</Layout>
