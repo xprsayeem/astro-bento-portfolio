@@ -1,36 +1,35 @@
 ---
 import Card from "./Card/index.astro";
-import { LINKS } from "../lib/constants";
 ---
 
-<Card colSpan="md:col-span-1" rowSpan="md:row-span-4">
-  <div class="h-full">
-    <header class="flex items-center">
-      <h1 class="text-white text-xl font-bold">
-        Let's start working together!
-      </h1>
-    </header>
-    <address class="flex flex-col mt-4">
-      <h2 class="text-gray-500">Contact Details</h2>
-      <p>sayeem.m@hotmail.com</p>
-      <p>Canada</p>
-    </address>
-    <div class="flex flex-col mt-4 w-fit">
-      <h2 class="text-gray-500">Socials</h2>
-      <ul>
-        <li>
-          <a href={LINKS.linkedin} target="_blank">Linkedin</a>
-        </li>
-        <li>
-          <a href={LINKS.github} target="_blank">Github</a>
-        </li>
-        <li>
-          <a href={LINKS.instagram} target="_blank">Instagram</a>
-        </li>
-        <li>
-          <a href={LINKS.discord} target="_blank">Discord</a>
+<Card
+  title="Projects"
+  href="/projects"
+  colSpan="md:col-span-1"
+  rowSpan="md:row-span-5"  
+>
+  <div class="h-full flex flex-col justify-between pb-2">  
+    <!-- Pitch -->
+    <section>
+      <p class="text-neutral-300 text-sm mt-1 leading-relaxed">
+        View some of my data work! Clean SQL & visuals that load fast. <br> Check out my github for more information.
+      </p>
+
+      <!-- Quick teasers -->
+      <ul class="mt-4 space-y-3 text-sm">
+        <li class="flex items-baseline gap-4 border-b border-white/10 pb-3">
+          <span>Licensed Pets - citywide trends</span>
+          <time class="tabular-nums text-neutral-400">2023 to 2025</time>
         </li>
       </ul>
+    </section>
+
+    <!-- Tech tags -->
+    <div class="mt-6 flex flex-wrap gap-2">
+      <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">Databricks</span>
+      <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">SQL</span>
+      <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">PySpark</span>
+      <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">AWS S3</span>
     </div>
   </div>
 </Card>
