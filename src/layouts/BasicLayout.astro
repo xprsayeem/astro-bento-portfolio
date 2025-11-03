@@ -103,6 +103,9 @@ const schema =
       set:html={JSON.stringify(schema)}
       type="application/ld+json"
     />
+    {import.meta.env.PROD && (
+      <script defer src="https://cloud.umami.is/script.js" data-website-id="6ab246a7-45c3-4b7d-8ffa-7e79be915496"></script>
+    )}
   </head>
   <body
     class="bg-darkslate-700 min-h-screen flex flex-col items-stretch">
