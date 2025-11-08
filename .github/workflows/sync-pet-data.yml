@@ -1,0 +1,52 @@
+name: Sync pet CSVs from S3 to public/data
+
+on:
+  schedule:
+    - cron: "0 16 * * 1"   # Mondays 11:00 EST,
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/github-oidc-read-s3-pets
+          aws-region: us-east-1
+
+      - name: Make data folder
+        run: mkdir -p public/data
+
+      - name: Download CSVs from S3 latest snapshot
+        run: |
+          aws s3 cp s3://certified-dogs-and-cats/exports/licensed_pets/latest/totals_by_year_type.csv public/data/totals_by_year_type.csv
+          aws s3 cp s3://certified-dogs-and-cats/exports/licensed_pets/latest/breed_share_citywide_all_years.csv public/data/breed_share_citywide_all_years.csv
+          aws s3 cp s3://certified-dogs-and-cats/exports/licensed_pets/latest/top3_breed_by_fsa.csv public/data/top3_breed_by_fsa.csv
+          aws s3 cp s3://certified-dogs-and-cats/exports/licensed_pets/latest/daily_stats.csv public/data/daily_stats.csv
+          aws s3 cp s3://certified-dogs-and-cats/exports/licensed_pets/latest/breed_stats.csv public/data/breed_stats.csv
+          aws s3 cp s3://certified-dogs-and-cats/exports/licensed_pets/latest/gold_health.csv public/data/gold_health.csv
+
+      - name: Detect changes
+        id: diff
+        run: |
+          git add public/data
+          if git diff --cached --quiet; then
+            echo "changed=no" >> $GITHUB_OUTPUT
+          else
+            echo "changed=yes" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push if changed
+        if: steps.diff.outputs.changed == 'yes'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(data): sync pet CSVs from S3 latest"
+          git push
