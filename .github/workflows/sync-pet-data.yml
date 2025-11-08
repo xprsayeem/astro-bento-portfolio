@@ -12,8 +12,10 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout master
         uses: actions/checkout@v4
+        with:
+          ref: master
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -49,4 +51,4 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "chore(data): sync pet CSVs from S3 latest"
-          git push
+          git push origin master
