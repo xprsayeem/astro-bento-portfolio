@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  id-token: write
   contents: write
 
 jobs:
@@ -20,7 +21,8 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::123456789012:role/github-oidc-read-s3-pets
+          role-to-assume: arn:aws:iam::123456789012:role/github_read_buckets
+          role-session-name: github-actions-sync
           aws-region: us-east-1
 
       - name: Make data folder
