@@ -7,44 +7,48 @@ import Tooltip from "./Tooltip/index";
 import { Image } from "astro:assets";
 ---
 
-<Card colSpan="md:col-span-3" rowSpan="md:row-span-4">
-  <div class="flex w-full h-full">
-    <div class="flex flex-col justify-between md:max-h-[300px] gap-4">
-      <div class="flex flex-col h-full">
-        <h6 class="text-sm font-light m-0 text-gray-500">welcome</h6>
-        <p class="m-0 font-light text-xl">
-          Hi, I'm <b class="font-bold">Sayeem Mahfuz</b>, a CS senior shaping data systems that scale. My work bridges analytics and engineering, focusing on building reliable, cloud-based pipelines on AWS and Databricks that turn raw data into clear, actionable insight.
+<Card colSpan="md:col-span-3" rowSpan="md:row-span-3">
+  <div class="flex w-full h-full gap-4">
+    <div class="flex flex-col justify-between flex-1 max-w-[75%]">
+      <div class="flex flex-col">
+        <h6 class="text-xs font-light m-0 mb-1 text-gray-500">welcome</h6>
+        <p class="m-0 font-light text-lg leading-tight">
+          Hi, I'm <b class="font-bold">Sayeem Mahfuz.</b> I'm always asking "what if?", and shortly finding myself engrossed in building the solutions to those questions.
         </p>
       </div>
-      <div class="flex gap-4">
+      <div class="flex gap-3">
         <a aria-label="github profile" href={LINKS.github} target="_blank">
           <Button aria-label="github profile">
-            <Icon class="h-6" name="ri:github-fill" />
+            <Icon class="h-5" name="ri:github-fill" />
             <span class="sr-only">GitHub Profile</span>
           </Button>
         </a>
         <a aria-label="linkedin profile" href={LINKS.linkedin} target="_blank">
           <Button aria-label="linkedin profile">
-            <Icon class="h-6" name="ri:linkedin-box-fill" />
+            <Icon class="h-5" name="ri:linkedin-box-fill" />
             <span class="sr-only">Linkedin Profile</span>
           </Button>
         </a>
         <a aria-label="Instagram profile" href={LINKS.instagram} target="_blank">
           <Button aria-label="dribble profile">
-            <Icon class="h-6" name="ri:dribbble-fill" />
+            <Icon class="h-5" name="ri:dribbble-fill" />
             <span class="sr-only">Instagram Profile</span>
           </Button>
         </a>
         <Tooltip client:visible>
           <Button aria-label="easter egg btn">
-            <Icon class="h-6" name="ri:emotion-laugh-line" />
+            <Icon class="h-5" name="ri:emotion-laugh-line" />
             <span class="sr-only">Easter egg button</span>
           </Button>
         </Tooltip>
       </div>
     </div>
     <Image
-      alt="memoji of sayeem"       class="w-auto max-h-[350px] select-none absolute right-[-110px] bottom-[-20px] z-[-1] opacity-50 md:opacity-100 md:relative md:right-auto md:bottom-auto md:z-auto pointer-events-none"       height="350"       src="/me.webp"       width="300"
+      alt="memoji of sayeem"
+      class="w-auto max-h-[280px] select-none absolute right-[-110px] bottom-[-20px] z-[-1] opacity-50 md:opacity-100 md:relative md:right-auto md:bottom-auto md:z-auto pointer-events-none"
+      height="280"
+      src="/me.webp"
+      width="240"
     />
   </div>
 </Card>

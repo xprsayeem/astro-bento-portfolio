@@ -2,33 +2,23 @@
 import Card from "./Card/index.astro";
 ---
 
-<Card colSpan="md:col-span-1" rowSpan="md:row-span-6" title="About me">
-  <div class="flex flex-col gap-2">
-    <div class="text-sm font-light">
-      <p>
-        Hi, I'm Sayeem, a TMU CS student from Toronto.
-        <br />
-        My primary tools of choice include:
+<Card colSpan="md:col-span-1" rowSpan="md:row-span-5" title="About me">
+  <div class="flex flex-col gap-1.5 h-full">
+    <div class="text-[12px] font-light">
+      <p class="leading-snug">
+        Hi, I'm Sayeem, a CS student at Toronto Metropolitan University. I'm learning all about building and working on data infrastructure.
       </p>
-      <ul class="list-disc list-inside">
-        <li>Python</li>
-        <li>SQL</li>
-        <li>PySpark</li>
-        <li>Databricks</li>
-        <li>AWS (S3, Glue, IAM)</li>
-        <li>Apache Airflow</li>
-        <li>Power BI / Tableau</li>
-        <li>Git / GitHub</li>
+      <p class="mt-1.5 mb-0.5 text-[12px]">What I've been working with:</p>
+      <ul class="list-disc list-inside text-[11px] leading-relaxed space-y-0.5">
+        <li>Python, SQL, PySpark</li>
+        <li>Databricks, GCP & AWS</li>
+        <li>Airflow, Power BI, Looker Studio</li>
+        <li>Github + Jira too</li>
       </ul>
     </div>
-    <p class="text-sm font-light">
-      Off the laptop: soccer, early-morning fishing, long runs, strength training, and building things in wood. 
+    <p class="text-[12px] font-light leading-snug mt-1">
+      Off the laptop: soccer, early-morning fishing, strength training, and building things with wood. 
       Music is in anything that moves. Currently reading: The Visible Man by Chuck Klosterman.
-    </p>
-    <p class="text-sm font-light">
-      While I have some preferred tools, I always choose the best one for the
-      job, even if it's not on my usual list. My goal is to find the right
-      solution for each project.
     </p>
   </div>
 </Card>

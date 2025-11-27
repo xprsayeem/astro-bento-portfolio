@@ -2,7 +2,7 @@
   import Layout from "../layouts/Layout.astro";
   import Card from "../components/Card/index.astro";
   import IntroCard from "../components/IntroCard.astro";
-  import ContactsCard from "../components/ContactsCard.astro";
+  import ProjectsCard from "../components/ProjectsCard.astro";
   import TimeZone from "../components/TimeZoneCard.astro";
   import AboutMe from "../components/AboutMe.astro";
   import Now from "../components/Now.astro";
@@ -42,14 +42,15 @@
 
   <Layout
     description="Hi, I’m Sayeem Mahfuz, a CS senior shaping data systems that scale. My work bridges analytics and engineering, focusing on building reliable, cloud-based pipelines on AWS and Databricks that turn raw data into clear, actionable insight."
-    title="Sayeem Mahfuz - Aspiring Data Engineer"
+    title="Sayeem Mahfuz :P"
   >
     <main
-      class="text-white m-auto p-2 grid gap-2 max-w-6xl overflow-hidden relative w-full sm:p-4 sm:gap-2 md:grid-cols-2 md:gap-3 md:p-6 lg:h-screen lg:grid-rows-8 lg:grid-cols-4 lg:gap-4 lg:max-h-[800px]"
+      class="text-white m-auto p-2 grid gap-2 max-w-6xl relative w-full sm:p-4 sm:gap-2 md:grid-cols-2 md:gap-3 md:p-6 lg:h-screen lg:grid-rows-8 lg:grid-cols-4 lg:gap-4 lg:py-4"
+      style="overflow: hidden;"
     >
       <IntroCard />
       <AboutMe />
-      <ContactsCard />
+      <ProjectsCard />
       <Card
         title="Time zone"
         colSpan="md:col-span-2"
@@ -63,17 +64,17 @@
         colorText="text-neutral-900"
         colSpan="md:col-span-1"
         href="travel"
-        rowSpan="md:row-span-1"
-        title="Countries I visited"
+        rowSpan="md:row-span-2"
+        title="Countries I've visited"
       >
         <div class="h-full w-full absolute inset-0 -z-10">
-          <Globe client:load />
+          <Globe client:load scale={280} />
         </div>
       </Card>
       <Card
         colSpan="md:col-span-1"
         href="/blog"
-        rowSpan="md:row-span-2 flex gap-1"
+        rowSpan="md:row-span-2"
         title="Blog"
       >
         <div class="flex flex-col gap-1">
@@ -101,15 +102,6 @@
             ))
           }
         </div>
-      </Card>
-      <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
-        <p class="text-xs">
-          Made using <a
-            class="text-red-500"
-            href="https://astro.build/"
-            target="_blank">Astro</a
-          > by Sayeem.
-        </p>
       </Card>
     </main>
   </Layout>

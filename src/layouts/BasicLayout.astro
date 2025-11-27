@@ -91,10 +91,17 @@ const schema =
     <meta content="summary_large_image" name="twitter:card" />
     <meta content={title} name="twitter:title" />
     <meta content={description} name="twitter:description" />
-    <meta
-      content={image || `${Astro.url.origin}/og-image.png`}
-      name="twitter:image"
-    />
+    <meta content={image || `${Astro.url.origin}/og-image.png`} name="twitter:image" />
+    <meta name="author" content="Sayeem Mahfuz" />
+    <meta name="keywords" content="Sayeem Mahfuz, Data Engineer, Databricks, AWS, PySpark, Toronto, TMU, Computer Science" />
+    <link rel="alternate" type="application/rss+xml" title="Sayeem Mahfuz Blog" href="/rss.xml" />
+
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#1e293b" />
+    <meta name="msapplication-TileColor" content="#1e293b" />
+
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
 
     <link href="https://cdn.fontshare.com" rel="preconnect" />
     <link href={Astro.url.href} rel="canonical" />
@@ -153,4 +160,5 @@ const schema =
   b {
     font-weight: 700 !important;
   }
+
 </style>

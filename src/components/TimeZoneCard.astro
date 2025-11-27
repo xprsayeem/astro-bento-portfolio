@@ -16,11 +16,11 @@ const { label = "Local time", timeZone = "America/Toronto", hour12 = true } = As
 const initial = formatTimeForCanada(new Date(), timeZone, hour12);
 ---
 
-<div class="h-full w-full p-3 text-neutral-100 flex flex-col">
-  <p class="text-xs text-neutral-400">{label}</p>
+<div class="h-full w-full text-neutral-100 flex flex-col">
+  <p class="text-[13px] text-neutral-400 m-0 leading-none mb-1">{label}</p>
   <time
     id="tz-time"
-    class="mt-1 block text-3xl md:text-4xl xl:text-5xl xl:whitespace-nowrap w-full flex-1 font-serif flex justify-center items-center tabular-nums"
+    class="block text-4xl md:text-5xl xl:text-6xl w-full flex-1 font-serif flex justify-center items-center tabular-nums leading-none"
     datetime={new Date().toISOString()}
     data-tz={timeZone}
     data-hour12={hour12 ? "true" : "false"}
