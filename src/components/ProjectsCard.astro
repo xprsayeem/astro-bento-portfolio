@@ -7,7 +7,15 @@ const projects = [
     href: "/projects",
     timeRange: "2025",
     description: "Production pipeline analyzing Toronto's pet trends",
-    tags: ["Databricks", "SQL", "PySpark", "AWS S3"],
+    tags: ["Databricks", "PySpark", "AWS S3"],
+    external: false
+  },
+  {
+    title: "Minds-On Data Architecture",
+    href: "/mindson",
+    timeRange: "2025",
+    description: "Full-stack data platform for a youth-focused NPO",
+    tags: ["Airtable", "Python", "JavaScript"],
     external: false
   },
   {
@@ -27,20 +35,16 @@ const projects = [
   rowSpan="md:row-span-4"
 >
   <div class="h-full flex flex-col">
-    <p class="text-neutral-300 text-[11px] leading-tight mb-2">
-      Check out some of my work!
-    </p>
-
-    <ul class="space-y-2 text-sm flex-1">
+    <ul class="space-y-1.5 text-sm flex-1">
       {projects.map((project) => (
-        <li class="border-b border-white/10 pb-2 last:border-0">
+        <li class="border-b border-white/10 pb-1.5 last:border-0 last:pb-0">
           <a 
             href={project.href}
-            class="group block hover:bg-white/5 -mx-2 px-2 py-1 rounded transition-colors"
+            class="group block hover:bg-white/5 -mx-2 px-2 py-0.5 rounded transition-colors"
             target={project.external ? "_blank" : undefined}
             rel={project.external ? "noopener noreferrer" : undefined}
           >
-            <div class="flex items-baseline justify-between gap-2 mb-0.5">
+            <div class="flex items-baseline justify-between gap-2">
               <div class="flex-1 min-w-0">
                 <span class="font-semibold text-neutral-50 group-hover:text-white transition-colors text-xs">
                   {project.title}
@@ -61,13 +65,13 @@ const projects = [
               </time>
             </div>
             
-            <p class="text-[10px] text-neutral-400 group-hover:text-neutral-300 transition-colors leading-tight mb-1">
+            <p class="text-[10px] text-neutral-400 group-hover:text-neutral-300 transition-colors leading-tight">
               {project.description}
             </p>
 
-            <div class="flex flex-wrap gap-1">
-              {project.tags.map((tag) => (
-                <span class="rounded bg-neutral-900 group-hover:bg-neutral-800 border border-neutral-700 px-1.5 py-0.5 text-[9px] leading-tight transition-colors">
+            <div class="flex flex-wrap gap-1 mt-0.5">
+              {project.tags.slice(0, 3).map((tag) => (
+                <span class="rounded bg-neutral-900 group-hover:bg-neutral-800 border border-neutral-700 px-1 py-0.5 text-[8px] leading-none transition-colors">
                   {tag}
                 </span>
               ))}

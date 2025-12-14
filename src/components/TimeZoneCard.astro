@@ -20,7 +20,7 @@ const initial = formatTimeForCanada(new Date(), timeZone, hour12);
   <p class="text-[13px] text-neutral-400 m-0 leading-none mb-1">{label}</p>
   <time
     id="tz-time"
-    class="block text-4xl md:text-5xl xl:text-6xl w-full flex-1 font-serif flex justify-center items-center tabular-nums leading-none"
+    class="block text-4xl md:text-5xl xl:text-6xl w-full flex-1 font-serif flex justify-center items-center tabular-nums leading-none whitespace-nowrap"
     datetime={new Date().toISOString()}
     data-tz={timeZone}
     data-hour12={hour12 ? "true" : "false"}

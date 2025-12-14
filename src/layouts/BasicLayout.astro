@@ -140,6 +140,8 @@ const schema =
   }
 
   body {
+    overflow-x: hidden;
+    height: 100%;
     margin: 0;
     font-family: "Satoshi", sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -159,6 +161,11 @@ const schema =
 
   b {
     font-weight: 700 !important;
+  }
+  @media (min-width: 1024px) {
+  body {
+    overflow: hidden;
+  }
   }
 
 </style>
