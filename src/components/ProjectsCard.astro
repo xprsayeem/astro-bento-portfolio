@@ -3,9 +3,17 @@ import Card from "./Card/index.astro";
 
 const projects = [
   {
+    title: "BoC Economics",
+    href: "/boc-economics",
+    timeRange: "2026",
+    description: "Canadian macro pipeline: BigQuery, dbt star schema, CI",
+    tags: ["dbt", "BigQuery", "Looker Studio"],
+    external: false
+  },
+  {
     title: "Prof Pulse",
     href: "/prof-pulse",
-    timeRange: "2025",
+    timeRange: "2026",
     description: "TMU course & professor reviews from 108k+ ratings",
     tags: ["Next.js", "Databricks", "AWS S3"],
     external: false
@@ -21,7 +29,7 @@ const projects = [
   {
     title: "Minds-On Data Architecture",
     href: "/mindson",
-    timeRange: "2025",
+    timeRange: "2026",
     description: "Full-stack data platform for a youth-focused NPO",
     tags: ["Airtable", "Python", "JavaScript"],
     external: false
@@ -39,47 +47,47 @@ const projects = [
 
 <Card
   title="Projects"
-  colSpan="md:col-span-1"
+  colSpan="md:col-span-1 lg:col-span-2"
   rowSpan="md:row-span-4"
 >
   <div class="h-full flex flex-col">
-    <ul class="space-y-1.5 text-sm flex-1">
+    <ul class="grid grid-cols-1 lg:grid-cols-2 gap-x-5 gap-y-0.5 flex-1 content-start mt-1">
       {projects.map((project) => (
-        <li class="border-b border-white/10 pb-1.5 last:border-0 last:pb-0">
-          <a 
+        <li>
+          <a
             href={project.href}
-            class="group block hover:bg-white/5 -mx-2 px-2 py-0.5 rounded transition-colors"
+            class="group block hover:bg-white/5 -mx-2 px-2 py-1.5 rounded transition-colors border-b border-white/10"
             target={project.external ? "_blank" : undefined}
             rel={project.external ? "noopener noreferrer" : undefined}
           >
             <div class="flex items-baseline justify-between gap-2">
               <div class="flex-1 min-w-0">
-                <span class="font-semibold text-neutral-50 group-hover:text-white transition-colors text-xs">
+                <span class="font-semibold text-neutral-50 group-hover:text-white transition-colors text-sm">
                   {project.title}
                 </span>
                 {project.external && (
-                  <svg 
-                    class="inline-block w-2.5 h-2.5 ml-1 opacity-40 group-hover:opacity-100 transition-opacity" 
-                    fill="none" 
-                    stroke="currentColor" 
+                  <svg
+                    class="inline-block w-3 h-3 ml-1 opacity-40 group-hover:opacity-100 transition-opacity"
+                    fill="none"
+                    stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 )}
               </div>
-              <time class="tabular-nums text-neutral-500 text-[10px] flex-shrink-0">
+              <time class="tabular-nums text-neutral-500 text-[11px] flex-shrink-0">
                 {project.timeRange}
               </time>
             </div>
-            
-            <p class="text-[10px] text-neutral-400 group-hover:text-neutral-300 transition-colors leading-tight">
+
+            <p class="text-xs text-neutral-400 group-hover:text-neutral-300 transition-colors leading-tight mt-0.5">
               {project.description}
             </p>
 
-            <div class="flex flex-wrap gap-1 mt-0.5">
+            <div class="flex flex-wrap gap-1 mt-1">
               {project.tags.slice(0, 3).map((tag) => (
-                <span class="rounded bg-neutral-900 group-hover:bg-neutral-800 border border-neutral-700 px-1 py-0.5 text-[8px] leading-none transition-colors">
+                <span class="rounded bg-neutral-900 group-hover:bg-neutral-800 border border-neutral-700 px-1.5 py-0.5 text-[10px] leading-none transition-colors">
                   {tag}
                 </span>
               ))}

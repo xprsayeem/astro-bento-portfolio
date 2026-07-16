@@ -18,7 +18,9 @@ const GlobeComponent = (props: GlobeProps) => {
     "Morocco",
     "Turkey",
     "Portugal",
-    "United Arab Emirates"
+    "United Arab Emirates",
+    "Egypt",
+    "Cyprus"
   ];
 
   onMount(() => {
