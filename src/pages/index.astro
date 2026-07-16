@@ -7,14 +7,6 @@
   import AboutMe from "../components/AboutMe.astro";
   import Now from "../components/Now.astro";
   import Globe from "../components/Globe";
-  import { getCollection } from "astro:content";
-  import { formatDate } from "../lib/helpers";
-
-  const posts = (await getCollection("blog"))?.sort(
-    (blogEntryA, blogEntryB) =>
-      (blogEntryB.data.pubDate || new Date()).getTime() -
-      (blogEntryA.data.pubDate || new Date()).getTime()
-  );
   ---
 
   <script>
@@ -46,7 +38,7 @@
     title="Sayeem Mahfuz :P"
   >
     <main
-      class="text-white m-auto p-2 grid gap-2 max-w-6xl relative w-full sm:p-4 sm:gap-2 md:grid-cols-2 md:gap-3 md:p-6 lg:h-screen lg:grid-rows-8 lg:grid-cols-4 lg:gap-4 lg:py-4"
+      class="text-white m-auto p-2 grid gap-2 max-w-6xl relative w-full sm:p-4 sm:gap-2 md:grid-cols-2 md:gap-3 md:p-6 lg:h-screen lg:grid-rows-7 lg:grid-cols-4 lg:gap-4 lg:py-4"
       style="overflow: hidden;"
     >
       <IntroCard />
@@ -70,38 +62,6 @@
       >
         <div class="h-full w-full absolute inset-0 -z-10">
           <Globe client:load scale={280} />
-        </div>
-      </Card>
-      <Card
-        colSpan="md:col-span-1"
-        href="/blog"
-        rowSpan="md:row-span-2"
-        title="Blog"
-      >
-        <div class="flex flex-col gap-1">
-          {
-            posts?.slice(0, 3).map((post) => (
-              // <a
-              //   class="text-sm md:text-base decoration-none flex justify-between"
-              //   href={`/blog/${post.id}`}
-              // >
-              <div class="list-none w-full text-neutral-100 hover:text-neutral-400 ease-in-out transition-colors border-b-neutral-400 border-dashed border-b-1 my-0">
-                <p class="inline-block whitespace-nowrap text-xs">
-                  {post.data.title}
-                </p>
-                {post.data.pubDate && (
-                  <time
-                    class="text-right tabular-nums text-xs"
-                    data-date={post.data.pubDate.toISOString()}
-                    datetime={post.data.pubDate.toISOString()}
-                  >
-                    {formatDate(post.data.pubDate)}
-                  </time>
-                )}
-              </div>
-              // </a>
-            ))
-          }
         </div>
       </Card>
     </main>

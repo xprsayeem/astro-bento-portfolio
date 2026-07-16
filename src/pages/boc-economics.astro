@@ -1,0 +1,317 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card/index.astro";
+
+const LIVE = "https://lookerstudio.google.com/s/uwB1ME5aTW8";
+const EMBED = "https://lookerstudio.google.com/embed/reporting/151e6464-ed38-4cd3-91eb-0320f6ea3dd4/page/bnz3F";
+const CODE = "https://github.com/xprsayeem/boc-economics-dbt";
+---
+
+<!-- Motion animation -->
+<script>
+  import { stagger, animate, type AnimationSequence } from "motion";
+  import { loaderAnimation } from "../lib/constants";
+
+  const cards = document.querySelectorAll(".card");
+
+  const sequence = [
+    loaderAnimation,
+    [
+      cards,
+      { y: ["40%", "0%"], opacity: [0, 1] },
+      { type: "spring", at: "-0.1", delay: stagger(0.3) },
+    ],
+  ];
+
+  animate(sequence as AnimationSequence);
+</script>
+
+<Layout
+  title="BoC Economics"
+  description="An end-to-end dbt analytics pipeline on Canadian macro data — Bank of Canada API to BigQuery to a tested star schema to Looker Studio."
+  showLoader>
+
+  <main class="text-white m-auto p-2 max-w-6xl overflow-visible relative w-full sm:p-4 md:p-6 lg:p-8 space-y-8">
+    <!-- Top nav: Back -->
+    <nav class="w-full sticky top-0 z-40 mb-3">
+      <div class="flex gap-2">
+        <button
+          type="button"
+          onclick="history.back()"
+          class="px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 text-sm hover:bg-white/10 active:scale-[0.99] transition"
+          aria-label="Go back"
+        >
+          ← Back
+        </button>
+      </div>
+    </nav>
+
+    <section class="!h-auto !overflow-visible space-y-6">
+
+      <!-- ============ HERO ============ -->
+      <Card title="BoC Economics" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="flex flex-col gap-6">
+          <div>
+            <p class="text-lg font-medium text-neutral-100">Canadian macro, from raw API to a live dashboard.</p>
+            <p class="text-sm text-neutral-300 leading-relaxed mt-2">
+              An end-to-end analytics-engineering pipeline built on Canadian macroeconomic data. It pulls four Bank of
+              Canada indicators, the <strong class="text-white">policy interest rate, inflation (CPI), the CAD/USD
+              exchange rate, and the 5-year government bond yield</strong>, through a clean
+              <strong class="text-white">BigQuery → dbt → Looker Studio</strong> stack: Python ingestion, a tested
+              staging → intermediate → mart star schema, and GitHub Actions CI that rebuilds and tests everything on
+              every pull request.
+            </p>
+          </div>
+
+          <!-- Headline stat tiles -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+              <div class="text-2xl font-bold text-blue-400">4</div>
+              <div class="text-[11px] text-neutral-400">Macro indicators</div>
+            </div>
+            <div class="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+              <div class="text-2xl font-bold text-purple-400">~13.5K</div>
+              <div class="text-[11px] text-neutral-400">Observations ingested</div>
+            </div>
+            <div class="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+              <div class="text-2xl font-bold text-teal-400">8</div>
+              <div class="text-[11px] text-neutral-400">dbt tests, all green</div>
+            </div>
+            <div class="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+              <div class="text-2xl font-bold text-amber-400">CI</div>
+              <div class="text-[11px] text-neutral-400">on every pull request</div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex flex-wrap items-center gap-2">
+            <a href={LIVE} target="_blank" rel="noreferrer"
+               class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-md transition-colors text-sm font-medium text-white">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              View live dashboard
+            </a>
+            <a href={CODE} target="_blank" rel="noreferrer"
+               class="inline-flex items-center gap-2 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-md transition-colors text-sm font-medium text-neutral-200">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+              </svg>
+              View code on GitHub
+            </a>
+          </div>
+        </div>
+      </Card>
+
+      <!-- ============ WHAT IT ANSWERS ============ -->
+      <Card title="The question it answers" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="flex flex-col gap-4">
+          <p class="text-sm text-neutral-300 leading-relaxed">
+            How do the Bank of Canada's <strong class="text-white">policy rate, inflation, exchange rate, and bond
+            yields</strong> move together, for example through the 2022–24 tightening cycle? Each of these lives in a
+            different place, at a different frequency. This pipeline lands all four on a single
+            <strong class="text-white">monthly timeline</strong> so they can be read on one chart.
+          </p>
+
+          <!-- The four indicators -->
+          <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+              <div class="text-xl mb-1">🏦</div>
+              <h5 class="text-xs font-semibold text-neutral-100">Policy rate</h5>
+              <p class="text-[11px] text-neutral-400 leading-tight">Target for the overnight rate (daily).</p>
+            </div>
+            <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+              <div class="text-xl mb-1">📈</div>
+              <h5 class="text-xs font-semibold text-neutral-100">Inflation (CPI)</h5>
+              <p class="text-[11px] text-neutral-400 leading-tight">Total Consumer Price Index (monthly).</p>
+            </div>
+            <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+              <div class="text-xl mb-1">💱</div>
+              <h5 class="text-xs font-semibold text-neutral-100">CAD / USD</h5>
+              <p class="text-[11px] text-neutral-400 leading-tight">Daily average exchange rate.</p>
+            </div>
+            <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+              <div class="text-xl mb-1">📊</div>
+              <h5 class="text-xs font-semibold text-neutral-100">5yr bond yield</h5>
+              <p class="text-[11px] text-neutral-400 leading-tight">GoC 5-year benchmark (daily).</p>
+            </div>
+          </div>
+
+          <p class="text-[11px] text-neutral-400 leading-relaxed">
+            The domain is deliberate: clean, credible, financial-services data that stays interesting to talk through, and
+            a realistic testbed for a production-shaped dbt project.
+          </p>
+        </div>
+      </Card>
+
+      <!-- ============ HOW IT'S BUILT: PIPELINE ============ -->
+      <Card title="How it's built: API to warehouse to dashboard" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="flex flex-col gap-5">
+          <p class="text-sm text-neutral-300 leading-relaxed">
+            A Python script lands raw data in BigQuery; dbt then transforms it in clean layers, each building on the last,
+            into a small <strong class="text-white">star schema</strong> that Looker Studio reads directly.
+          </p>
+
+          <!-- Pipeline flow diagram -->
+          <div class="rounded-xl bg-black/20 border border-white/10 p-4 sm:p-5">
+            <div class="flex flex-col items-stretch gap-2">
+
+              <!-- Source -->
+              <div class="rounded-lg bg-white/5 border border-white/10 px-4 py-3 flex items-center gap-3">
+                <span class="text-xl">📡</span>
+                <div>
+                  <div class="text-sm font-semibold text-neutral-100">Bank of Canada Valet API</div>
+                  <div class="text-[11px] text-neutral-400">Free public REST API, four macro series confirmed against the live catalogue</div>
+                </div>
+              </div>
+              <div class="text-center text-neutral-600 text-lg leading-none">↓</div>
+
+              <!-- Ingest -->
+              <div class="rounded-lg bg-white/5 border border-white/10 px-4 py-3 flex items-center gap-3">
+                <span class="text-xl">🐍</span>
+                <div>
+                  <div class="text-sm font-semibold text-neutral-100">Python ingestion <span class="text-[11px] font-normal text-neutral-400">(requests)</span></div>
+                  <div class="text-[11px] text-neutral-400">Idempotent truncate-and-reload into <code class="bg-neutral-800 px-1 rounded text-[10px]">boc_raw</code>, with retry + backoff</div>
+                </div>
+              </div>
+              <div class="text-center text-neutral-600 text-lg leading-none">↓</div>
+
+              <!-- dbt layers -->
+              <div class="text-[11px] uppercase tracking-wider text-neutral-500 text-center mt-1">Transformed in layers with dbt</div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 items-stretch">
+                <div class="rounded-lg bg-sky-950/30 border border-sky-500/30 px-3 py-3">
+                  <div class="flex items-center gap-2"><span>🔹</span><span class="text-sm font-semibold text-sky-200">Staging</span></div>
+                  <div class="text-[11px] text-neutral-400 mt-1">One typed, cleaned view per series.</div>
+                </div>
+                <div class="rounded-lg bg-indigo-950/30 border border-indigo-500/30 px-3 py-3">
+                  <div class="flex items-center gap-2"><span>🔸</span><span class="text-sm font-semibold text-indigo-200">Intermediate</span></div>
+                  <div class="text-[11px] text-neutral-400 mt-1">Union to one monthly grain (daily → month-end).</div>
+                </div>
+                <div class="rounded-lg bg-amber-900/30 border border-amber-500/30 px-3 py-3">
+                  <div class="flex items-center gap-2"><span>⭐</span><span class="text-sm font-semibold text-amber-200">Mart</span></div>
+                  <div class="text-[11px] text-neutral-400 mt-1">Fact + dimension seed = a clean star schema.</div>
+                </div>
+              </div>
+              <div class="text-center text-neutral-600 text-lg leading-none">↓</div>
+
+              <!-- CI -->
+              <div class="rounded-lg bg-green-950/30 border border-green-500/30 px-4 py-3 flex items-center gap-3">
+                <span class="text-xl">✅</span>
+                <div>
+                  <div class="text-sm font-semibold text-green-200">GitHub Actions CI</div>
+                  <div class="text-[11px] text-neutral-400">Runs <code class="bg-neutral-800 px-1 rounded text-[10px]">dbt build</code> + tests on every PR, against an isolated CI dataset</div>
+                </div>
+              </div>
+              <div class="text-center text-neutral-600 text-lg leading-none">↓</div>
+
+              <!-- Serve -->
+              <div class="rounded-lg bg-purple-950/30 border border-purple-500/30 px-4 py-3 flex items-center gap-3">
+                <span class="text-xl">📊</span>
+                <div>
+                  <div class="text-sm font-semibold text-purple-200">Looker Studio</div>
+                  <div class="text-[11px] text-neutral-400">Interactive dashboard on the fact table: indicator selector, date zoom, KPI scorecards</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <p class="text-[11px] text-neutral-400 leading-relaxed">
+            The layered pattern (staging → intermediate → mart) keeps a clean lineage: every number on the dashboard can be
+            traced back through the models to the original API observation.
+          </p>
+        </div>
+      </Card>
+
+      <!-- ============ ENGINEERING HIGHLIGHTS ============ -->
+      <Card title="The details that make it real" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="grid gap-3 md:grid-cols-3">
+
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <div class="text-2xl mb-2">🗓️</div>
+            <h4 class="text-sm font-semibold text-neutral-100 mb-1">Mixed frequencies, one grain</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed">
+              CPI is monthly; the rate, FX, and yield are daily. A window function collapses each daily series to its
+              <strong class="text-neutral-200">month-end</strong> value, so all four align on a single monthly timeline
+              without distorting a step-function like the policy rate.
+            </p>
+          </div>
+
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <div class="text-2xl mb-2">🧪</div>
+            <h4 class="text-sm font-semibold text-neutral-100 mb-1">A custom data-quality test</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed">
+              Alongside seven built-in tests, a custom <code class="bg-neutral-800 px-1 rounded text-[10px]">no_missing_months</code>
+              test flags gaps in any series. It's <strong class="text-neutral-200">partition-aware</strong>, so series with
+              different start dates (FX only begins 2017) are each checked over their own history.
+            </p>
+          </div>
+
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <div class="text-2xl mb-2">🔁</div>
+            <h4 class="text-sm font-semibold text-neutral-100 mb-1">CI that can't touch prod</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed">
+              Every pull request runs the full build and test suite via GitHub Actions, writing to a
+              <strong class="text-neutral-200">separate CI dataset</strong> so it never affects the production data.
+              Auth is a single env-var swap shared by local and CI.
+            </p>
+          </div>
+
+        </div>
+      </Card>
+
+      <!-- ============ TECH STACK ============ -->
+      <Card title="The stack" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="grid gap-3 md:grid-cols-3">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <h4 class="text-xs font-semibold text-amber-300 mb-2 uppercase tracking-wider">Warehouse & transform</h4>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">BigQuery</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">dbt Core</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">dbt-bigquery</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">SQL</span>
+            </div>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <h4 class="text-xs font-semibold text-blue-300 mb-2 uppercase tracking-wider">Ingestion</h4>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Python</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">requests</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">google-cloud-bigquery</span>
+            </div>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <h4 class="text-xs font-semibold text-purple-300 mb-2 uppercase tracking-wider">CI & delivery</h4>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">GitHub Actions</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Looker Studio</span>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <!-- ============ LIVE PREVIEW ============ -->
+      <Card rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <section class="flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-semibold text-neutral-200">See it live</h3>
+            <a href={LIVE} target="_blank" rel="noreferrer" class="text-xs underline text-neutral-400 hover:text-white">Open in new tab ↗</a>
+          </div>
+          <p class="text-xs text-neutral-400">
+            The Looker Studio dashboard, embedded below. Use the selector to switch indicators and drag across the chart to
+            zoom into any period.
+          </p>
+          <iframe
+            src={EMBED}
+            class="w-full aspect-[4/3] rounded-lg border border-white/10 bg-white"
+            loading="lazy"
+            title="BoC Economics dashboard"
+            allowfullscreen
+            sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          ></iframe>
+        </section>
+      </Card>
+
+    </section>
+  </main>
+</Layout>
