@@ -67,7 +67,7 @@ import Card from "../components/Card/index.astro";
 
           <!-- Expandable How it works -->
           <details class="mt-1 cursor-pointer">
-            <summary class="font-semibold text-neutral-200 hover:text-blue-400 transition-colors list-none cursor-pointer select-none">
+            <summary class="font-semibold text-neutral-200 hover:text-sky-300 transition-colors list-none cursor-pointer select-none">
               🔧 How it works <span class="text-xs text-neutral-400">(click to expand)</span>
             </summary>
             
@@ -91,11 +91,11 @@ import Card from "../components/Card/index.astro";
                   I designed a <strong class="text-white">5-base relational architecture</strong> in Airtable:
                 </p>
                 <ul class="list-disc list-inside text-neutral-300 space-y-1 pl-4 text-sm">
-                  <li><strong class="text-blue-300">Students</strong> – Core records with personal info, school details, medical/dietary notes, parent/guardian contact information</li>
-                  <li><strong class="text-teal-300">Attendance</strong> – Junction table linking students to programs and events with check-in/out times and session notes</li>
-                  <li><strong class="text-purple-300">Programs</strong> – Recurring activities like tutoring, sports nights, movie nights, workshops with capacity, scheduling, and resource tracking</li>
-                  <li><strong class="text-orange-300">Staff</strong> – Full-time employees, volunteers, student leaders with certifications, availability, and assignments</li>
-                  <li><strong class="text-green-300">Events</strong> – Large community events with sub-tables for budget tracking, vendor management, sponsor outreach, and marketing</li>
+                  <li><strong class="text-sky-300">Students</strong> – Core records with personal info, school details, medical/dietary notes, parent/guardian contact information</li>
+                  <li><strong class="text-sky-300">Attendance</strong> – Junction table linking students to programs and events with check-in/out times and session notes</li>
+                  <li><strong class="text-sky-300">Programs</strong> – Recurring activities like tutoring, sports nights, movie nights, workshops with capacity, scheduling, and resource tracking</li>
+                  <li><strong class="text-sky-300">Staff</strong> – Full-time employees, volunteers, student leaders with certifications, availability, and assignments</li>
+                  <li><strong class="text-sky-300">Events</strong> – Large community events with sub-tables for budget tracking, vendor management, sponsor outreach, and marketing</li>
                 </ul>
                 <p class="text-neutral-300 leading-relaxed mt-2">
                   Record linkage and validation checks ensure data integrity across all bases, eliminating the duplicate records that plagued the previous spreadsheet system.
@@ -110,13 +110,13 @@ import Card from "../components/Card/index.astro";
                 </p>
                 <ul class="list-disc list-inside text-neutral-300 space-y-1 pl-4 text-sm">
                   <li>
-                    <strong class="text-yellow-300">JavaScript + Airtable API</strong> – Syncs registration form submissions to the database in real-time, performing data validation, deduplication, and record enrichment. Handles 100+ weekly enrollments with zero manual entry.
+                    <strong class="text-sky-300">JavaScript + Airtable API</strong> – Syncs registration form submissions to the database in real-time, performing data validation, deduplication, and record enrichment. Handles 100+ weekly enrollments with zero manual entry.
                   </li>
                   <li>
-                    <strong class="text-blue-300">Python ETL Scripts</strong> – Joins attendance and enrollment data across bases to generate reporting dashboards. Calculates metrics like program utilization, attendance rates, and staff hours.
+                    <strong class="text-sky-300">Python ETL Scripts</strong> – Joins attendance and enrollment data across bases to generate reporting dashboards. Calculates metrics like program utilization, attendance rates, and staff hours.
                   </li>
                   <li>
-                    <strong class="text-red-300">Zapier Workflows</strong> – Automates email notifications, SMS alerts, calendar updates, and status changes. Reduced admin communication time by 60%.
+                    <strong class="text-slate-300">Zapier Workflows</strong> – Automates email notifications, SMS alerts, calendar updates, and status changes. Reduced admin communication time by 60%.
                   </li>
                 </ul>
               </div>
@@ -136,14 +136,14 @@ import Card from "../components/Card/index.astro";
 
               <!-- Closing -->
               <p class="text-neutral-300 leading-relaxed font-medium border-t border-neutral-700 pt-4">
-                The result of all this is a unified data platform where <strong class="text-blue-400">every enrollment, attendance record, and staff assignment flows through validated, connected bases,</strong> giving the team at Minds-On actionable visibility into their operations.
+                The result of all this is a unified data platform where <strong class="text-sky-300">every enrollment, attendance record, and staff assignment flows through validated, connected bases,</strong> giving the team at Minds-On actionable visibility into their operations.
               </p>
 
             </div>
           </details>
 
           <!-- Impact Metrics Callout -->
-          <section class="rounded-xl bg-gradient-to-br from-blue-950/30 to-purple-950/30 border border-blue-500/20 p-6">
+          <section class="rounded-xl bg-gradient-to-br from-sky-950/30 to-slate-950/30 border border-sky-500/20 p-6">
             <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
               Impact
             </h3>
@@ -234,30 +234,30 @@ import Card from "../components/Card/index.astro";
 
           <!-- Workflow Examples -->
           <div class="grid gap-3 md:grid-cols-3 mt-2">
-            <div class="rounded-lg bg-green-950/20 border border-green-500/20 p-3">
+            <div class="rounded-lg bg-sky-950/20 border border-sky-500/20 p-3">
               <div class="flex items-center gap-2 mb-1">
-                <div class="w-3 h-3 rounded-full bg-green-400"></div>
-                <h4 class="text-xs font-semibold text-green-300">Form Submission</h4>
+                <div class="w-3 h-3 rounded-full bg-sky-400"></div>
+                <h4 class="text-xs font-semibold text-sky-300">Form Submission</h4>
               </div>
               <p class="text-xs text-neutral-400 leading-relaxed">
                 Parent submits registration → JavaScript validates & deduplicates → Record created in Students base → Confirmation email sent via Zapier
               </p>
             </div>
 
-            <div class="rounded-lg bg-blue-950/20 border border-blue-500/20 p-3">
+            <div class="rounded-lg bg-sky-950/20 border border-sky-500/20 p-3">
               <div class="flex items-center gap-2 mb-1">
-                <div class="w-3 h-3 rounded-full bg-blue-400"></div>
-                <h4 class="text-xs font-semibold text-blue-300">Staff Marks Attendance</h4>
+                <div class="w-3 h-3 rounded-full bg-sky-400"></div>
+                <h4 class="text-xs font-semibold text-sky-300">Staff Marks Attendance</h4>
               </div>
               <p class="text-xs text-neutral-400 leading-relaxed">
                 Staff checks in student → Attendance record created with timestamp → Program capacity updates in real-time → Parent notified of check-in
               </p>
             </div>
 
-            <div class="rounded-lg bg-pink-950/20 border border-pink-500/20 p-3">
+            <div class="rounded-lg bg-sky-950/20 border border-sky-500/20 p-3">
               <div class="flex items-center gap-2 mb-1">
-                <div class="w-3 h-3 rounded-full bg-pink-400"></div>
-                <h4 class="text-xs font-semibold text-pink-300">Reports to Leadership</h4>
+                <div class="w-3 h-3 rounded-full bg-sky-400"></div>
+                <h4 class="text-xs font-semibold text-sky-300">Reports to Leadership</h4>
               </div>
               <p class="text-xs text-neutral-400 leading-relaxed">
                 Python extracts attendance data → Joins with enrollment records → Calculates metrics → Dashboard updates → Weekly summary emailed to leadership

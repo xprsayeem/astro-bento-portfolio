@@ -608,7 +608,7 @@ async function fillPreviewTable() {
         
   
           <details class="mt-1 cursor-pointer">
-            <summary class="font-semibold text-neutral-200 hover:text-blue-400 transition-colors list-none cursor-pointer select-none">
+            <summary class="font-semibold text-neutral-200 hover:text-sky-300 transition-colors list-none cursor-pointer select-none">
               🔧 How it works <span class="text-xs text-neutral-400">(click to expand)</span>
             </summary>
             
@@ -624,7 +624,7 @@ async function fillPreviewTable() {
                 <h4 class="text-base font-semibold text-neutral-100">Ingestion (Raw → Bronze)</h4>
                 <p class="text-neutral-300 leading-relaxed">
                   A Python script connects to Toronto's Open Data CKAN API, downloads the latest pet licensing records, 
-                  and uploads them to AWS S3 as dated snapshots (<code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-blue-300">raw/2025-11-02/</code>). 
+                  and uploads them to AWS S3 as dated snapshots (<code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-sky-300">raw/2025-11-02/</code>). 
                   This creates a permanent audit trail: I can replay any historical load if needed.
                 </p>
                 <p class="text-neutral-300 leading-relaxed">
@@ -649,11 +649,11 @@ async function fillPreviewTable() {
                   then builds focused analytical views:
                 </p>
                 <ul class="list-disc list-inside text-neutral-300 space-y-1 pl-4 text-sm">
-                  <li><code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-blue-300">totals_by_year_type</code> – yearly registration counts</li>
-                  <li><code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-blue-300">breed_stats</code> – breed frequencies and rankings</li>
-                  <li><code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-blue-300">top3_breed_by_fsa</code> – geographic breed patterns</li>
-                  <li><code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-blue-300">daily_stats</code> – ingestion volume for freshness monitoring</li>
-                  <li><code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-blue-300">gold_health</code> – data quality metrics (mapped %, null rates)</li>
+                  <li><code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-sky-300">totals_by_year_type</code> – yearly registration counts</li>
+                  <li><code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-sky-300">breed_stats</code> – breed frequencies and rankings</li>
+                  <li><code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-sky-300">top3_breed_by_fsa</code> – geographic breed patterns</li>
+                  <li><code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-sky-300">daily_stats</code> – ingestion volume for freshness monitoring</li>
+                  <li><code class="bg-neutral-800 px-1.5 py-0.5 rounded text-xs text-sky-300">gold_health</code> – data quality metrics (mapped %, null rates)</li>
                 </ul>
               </div>
 
@@ -674,25 +674,25 @@ async function fillPreviewTable() {
                 <p class="text-neutral-300 leading-relaxed">
                   Databricks Workflows runs five notebooks sequentially every morning: 
                   <span class="inline-flex items-center gap-1 text-xs bg-neutral-800 px-2 py-1 rounded">
-                    <code class="text-blue-300">ingest</code>
+                    <code class="text-sky-300">ingest</code>
                     <span class="text-neutral-500">→</span>
-                    <code class="text-yellow-300">bronze</code>
+                    <code class="text-sky-300">bronze</code>
                     <span class="text-neutral-500">→</span>
                     <code class="text-gray-300">silver</code>
                     <span class="text-neutral-500">→</span>
-                    <code class="text-amber-300">gold</code>
+                    <code class="text-sky-300">gold</code>
                     <span class="text-neutral-500">→</span>
-                    <code class="text-purple-300">export</code>
+                    <code class="text-sky-300">export</code>
                   </span>. 
                   Each stage depends on the previous one's success. The entire stack (S3 storage + Databricks compute + 
-                  Netlify hosting) costs <strong class="text-green-400">under $10/month</strong> thanks to single-node 
+                  Netlify hosting) costs <strong class="text-sky-300">under $10/month</strong> thanks to single-node 
                   spot clusters, auto-termination, and static serving.
                 </p>
               </div>
 
               <!-- Closing -->
               <p class="text-neutral-300 leading-relaxed font-medium border-t border-neutral-700 pt-4">
-                Every commit, every transformation and every quality check is <strong class="text-blue-400">traceable from API to chart</strong>.
+                Every commit, every transformation and every quality check is <strong class="text-sky-300">traceable from API to chart</strong>.
               </p>
 
               <!-- GitHub Link -->
@@ -734,7 +734,7 @@ async function fillPreviewTable() {
             </div>
           </div>
         <!-- Key Findings -->
-<section class="mt-8 rounded-xl bg-gradient-to-br from-blue-950/30 to-purple-950/30 border border-blue-500/20 p-6">
+<section class="mt-8 rounded-xl bg-gradient-to-br from-sky-950/30 to-slate-950/30 border border-sky-500/20 p-6">
   <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
     Key Findings
   </h3>
@@ -748,7 +748,7 @@ async function fillPreviewTable() {
         <div>
           <h4 class="font-semibold text-neutral-100 text-sm">Cat breed concentration is extreme</h4>
           <p class="text-xs text-neutral-300 leading-relaxed">
-            <strong class="text-blue-400">73.9%</strong> of Toronto cats are Domestic Shorthair. 
+            <strong class="text-sky-300">73.9%</strong> of Toronto cats are Domestic Shorthair. 
             The top breed dominates so heavily that "Other" barely registers. Cat owners overwhelmingly choose one breed.
           </p>
         </div>
@@ -762,7 +762,7 @@ async function fillPreviewTable() {
         <div>
           <h4 class="font-semibold text-neutral-100 text-sm">Dog diversity is striking</h4>
           <p class="text-xs text-neutral-300 leading-relaxed">
-            The most popular dog breed (Labrador Retriever) represents just <strong class="text-blue-400">9.6%</strong> 
+            The most popular dog breed (Labrador Retriever) represents just <strong class="text-sky-300">9.6%</strong> 
             of registrations. Dogs show massive breed diversity, over 300 breeds were represented, with a long tail of rare breeds.
           </p>
         </div>
@@ -776,7 +776,7 @@ async function fillPreviewTable() {
         <div>
           <h4 class="font-semibold text-neutral-100 text-sm">Pet registrations dropped sharply in 2025</h4>
           <p class="text-xs text-neutral-300 leading-relaxed">
-            Both cats (<strong class="text-red-400">-18.4%</strong>) and dogs (<strong class="text-red-400">-18.8%</strong>) 
+            Both cats (<strong class="text-slate-300">-18.4%</strong>) and dogs (<strong class="text-slate-300">-18.8%</strong>) 
             saw nearly identical declines. This could signal post-pandemic pet returns, economic pressures, or changes in licensing enforcement.
           </p>
         </div>
@@ -792,7 +792,7 @@ async function fillPreviewTable() {
           <p class="text-xs text-neutral-300 leading-relaxed">
             The top 10 cat breeds shifted significantly between 2023-2025, with multiple breeds swapping positions. 
             Dog breed rankings remained remarkably stable. This likely reflects sampling bias as the top 3 cat breeds dominate 
-            <strong class="text-amber-400">80%+</strong> of registrations, leaving fewer breeds competing for remaining spots.
+            <strong class="text-sky-300">80%+</strong> of registrations, leaving fewer breeds competing for remaining spots.
           </p>
         </div>
       </div>
@@ -897,10 +897,10 @@ async function fillPreviewTable() {
         <!-- Health -->
         <section id="healthSection" class="flex flex-col gap-3">
           <h3 class="font-semibold text-neutral-200">Health and pipeline quality</h3>
-          <div class="rounded-lg bg-blue-950/20 border border-blue-500/30 p-4 mb-3">
+          <div class="rounded-lg bg-sky-950/20 border border-sky-500/30 p-4 mb-3">
             <h4 class="text-sm font-semibold mb-2">Data Quality: 99.5%+ Accuracy</h4>
             <p class="text-xs text-neutral-300 leading-relaxed mb-2">
-              Out of 175,000+ pets, <strong class="text-green-400">99.5%+ successfully mapped</strong> to canonical breed names and valid postal codes.
+              Out of 175,000+ pets, <strong class="text-sky-300">99.5%+ successfully mapped</strong> to canonical breed names and valid postal codes.
             </p>
             <p class="text-xs text-neutral-400 leading-relaxed">
               <strong>What about the other 0.5%?</strong> Rare or misspelled breeds (e.g., "Pomski" vs "Pomeranian-Husky Mix"), 
@@ -974,7 +974,7 @@ async function fillPreviewTable() {
         </section>
         </Card>
         <!-- What's Next -->
-        <section class="rounded-xl bg-gradient-to-br from-purple-950/30 to-pink-950/30 border border-purple-500/20 p-6">
+        <section class="rounded-xl bg-gradient-to-br from-sky-950/30 to-slate-950/30 border border-sky-500/20 p-6">
           <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
             What's Next?
           </h3>

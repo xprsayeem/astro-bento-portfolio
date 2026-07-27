@@ -27,19 +27,23 @@
       ],
     ];
 
-    animate(sequence as AnimationSequence);
+    // The cards' entrance animation starts them translated down (y:40%), which
+    // briefly extends the page past the viewport and flashes a scrollbar. Hide
+    // the vertical scrollbar until the animation settles, then restore it so
+    // short screens can still scroll.
+    const root = document.documentElement;
+    root.style.overflowY = "hidden";
+    const restore = () => { root.style.overflowY = ""; };
+    const controls = animate(sequence as AnimationSequence);
+    controls?.finished?.then(restore).catch(restore);
+    setTimeout(restore, 3200); // safety net if `finished` never resolves
   </script>
-  <script is:inline>
-    document.body.classList.add('no-scroll');
-  </script>
-
   <Layout
     description="Hi, I’m Sayeem Mahfuz, a CS senior shaping data systems that scale. My work bridges analytics and engineering, focusing on building reliable, cloud-based pipelines on AWS and Databricks that turn raw data into clear, actionable insight."
     title="Sayeem Mahfuz :P"
   >
     <main
-      class="text-white m-auto p-2 grid gap-2 max-w-6xl relative w-full sm:p-4 sm:gap-2 md:grid-cols-2 md:gap-3 md:p-6 lg:h-screen lg:grid-rows-7 lg:grid-cols-4 lg:gap-4 lg:py-4"
-      style="overflow: hidden;"
+      class="text-white m-auto p-2 grid gap-2 max-w-6xl relative w-full overflow-x-hidden sm:p-4 sm:gap-2 md:grid-cols-2 md:gap-3 md:p-6 lg:min-h-screen lg:grid-rows-[repeat(7,minmax(min-content,1fr))] lg:grid-cols-4 lg:gap-4 lg:py-4"
     >
       <IntroCard />
       <AboutMe />

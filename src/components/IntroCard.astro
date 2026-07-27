@@ -4,7 +4,6 @@ import Button from "./Button.astro";
 import { LINKS } from "../lib/constants";
 import { Icon } from 'astro-icon/components'
 import Tooltip from "./Tooltip/index";
-import { Image } from "astro:assets";
 ---
 
 <Card colSpan="md:col-span-3" rowSpan="md:row-span-3">
@@ -13,7 +12,7 @@ import { Image } from "astro:assets";
       <div class="flex flex-col">
         <h6 class="text-xs font-light m-0 mb-1 text-gray-500">welcome</h6>
         <p class="m-0 font-light text-lg leading-tight">
-          Hi, I'm <b class="font-bold">Sayeem Mahfuz.</b> I'm always asking "what if?", and shortly finding myself engrossed in building the solutions to those questions.
+          Hi, I'm <b class="font-bold">Sayeem Mahfuz.</b> Welcome to my corner of the web — take a look around at what I build and what I'm into.
         </p>
       </div>
       <div class="flex gap-3">
@@ -43,12 +42,27 @@ import { Image } from "astro:assets";
         </Tooltip>
       </div>
     </div>
-    <Image
-      alt="memoji of sayeem"
-      class="w-auto max-h-[280px] select-none absolute right-[-110px] bottom-[-20px] z-[-1] opacity-50 md:opacity-100 md:relative md:right-auto md:bottom-auto md:z-auto pointer-events-none"
-      height="280"
-      src="/me.webp"
-      width="240"
+    <!-- Mobile: faded atmospheric accent bleeding from the right, behind the text -->
+    <img
+      src="/newpic.jpeg"
+      alt=""
+      aria-hidden="true"
+      class="md:hidden absolute right-[-25%] top-0 h-full w-auto max-w-none object-cover opacity-20 -z-10 pointer-events-none select-none"
+      style="object-position: 44% 26%;"
     />
+
+    <!-- md+: framed profile photo with a cool ice-toned gradient frame -->
+    <div class="hidden md:flex shrink-0 items-center">
+      <div class="rounded-2xl p-[2px] bg-gradient-to-br from-sky-300/70 via-white/25 to-slate-300/55 shadow-xl shadow-black/50">
+        <img
+          src="/newpic.jpeg"
+          alt="Sayeem Mahfuz"
+          width="230"
+          height="210"
+          class="h-[210px] w-[230px] object-cover rounded-[15px] block select-none pointer-events-none"
+          style="object-position: 44% 26%;"
+        />
+      </div>
+    </div>
   </div>
 </Card>
