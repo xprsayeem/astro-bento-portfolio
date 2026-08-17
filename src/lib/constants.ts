@@ -3,7 +3,7 @@ export const LINKS = {
   linkedin: "https://www.linkedin.com/in/s1mahfuz/",
   discord: "https://discordapp.com/users/163300027618295808",
   instagram: "https://instagram.com/xprsayeem",
-  email: "sayeem.m@hotmail.com<",
+  email: "sayeem.m@hotmail.com",
 };
 
 export const loaderAnimation = [
