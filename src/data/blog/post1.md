@@ -67,7 +67,7 @@ Each step builds on the same foundation: reliability, scalability, and reproduci
 ---
 
 **Repository:** [GitHub – Licensed Pets Data Pipeline](https://github.com/sayeemmahfuz)  
-**Connect:** [LinkedIn – Sayeem Mahfuz](https://linkedin.com/in/sayeem-mahfuz)
+**Connect:** [LinkedIn – Sayeem Mahfuz](https://www.linkedin.com/in/s1mahfuz/)
 
 
 ---

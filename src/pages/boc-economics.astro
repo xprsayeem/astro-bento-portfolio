@@ -28,7 +28,7 @@ const CODE = "https://github.com/xprsayeem/boc-economics-dbt";
 
 <Layout
   title="BoC Economics"
-  description="A warehouse-agnostic dbt analytics pipeline on Canadian macro data — Bank of Canada API to BigQuery and Snowflake, orchestrated with Airflow, into a tested star schema and a live Looker Studio dashboard."
+  description="A warehouse-agnostic dbt analytics pipeline on Canadian macro data: Bank of Canada API to BigQuery and Snowflake, orchestrated with Airflow, into a tested star schema and a live Looker Studio dashboard."
   showLoader>
 
   <main class="text-white m-auto p-2 max-w-6xl overflow-visible relative w-full sm:p-4 md:p-6 lg:p-8 space-y-8">
@@ -37,7 +37,7 @@ const CODE = "https://github.com/xprsayeem/boc-economics-dbt";
       <div class="flex gap-2">
         <button
           type="button"
-          onclick="history.back()"
+          onclick="window.location.href='/'"
           class="px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 text-sm hover:bg-white/10 active:scale-[0.99] transition"
           aria-label="Go back"
         >
@@ -264,18 +264,18 @@ const CODE = "https://github.com/xprsayeem/boc-economics-dbt";
       <Card title="Two warehouses, one codebase" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
         <div class="flex flex-col gap-4">
           <p class="text-sm text-neutral-300 leading-relaxed">
-            The same dbt project runs on <strong class="text-white">BigQuery and Snowflake</strong>, chosen by target — no
+            The same dbt project runs on <strong class="text-white">BigQuery and Snowflake</strong>, chosen by target, with no
             forked models, no forked ingestion. The BigQuery-isms are resolved with <strong class="text-white">dbt
             cross-database macros</strong> (<code class="bg-neutral-800 px-1 rounded text-[10px]">date_trunc</code>,
             <code class="bg-neutral-800 px-1 rounded text-[10px]">datediff</code>,
             <code class="bg-neutral-800 px-1 rounded text-[10px]">generate_surrogate_key</code>) and a target-aware source,
-            so all 8 tests — including the custom one — pass identically on both. Snowflake auth is key-pair via env vars,
+            so all 8 tests, including the custom one, pass identically on both. Snowflake auth is key-pair via env vars,
             mirroring BigQuery's; the ingestion script loads either warehouse with a <code class="bg-neutral-800 px-1 rounded text-[10px]">--warehouse</code> flag.
           </p>
           <figure class="rounded-lg border border-white/10 overflow-hidden bg-black/20">
             <img src="/boc-snowflake-models.png" alt="The dbt star schema materialized in Snowflake" class="w-full block" loading="lazy" />
             <figcaption class="text-[11px] text-neutral-400 px-3 py-2 border-t border-white/10">
-              The same models, built in Snowflake — <code class="bg-neutral-800 px-1 rounded text-[10px]">BOC_DB.BOC_ANALYTICS</code>, all 8 tests green.
+              The same models, built in Snowflake: <code class="bg-neutral-800 px-1 rounded text-[10px]">BOC_DB.BOC_ANALYTICS</code>, all 8 tests green.
             </figcaption>
           </figure>
         </div>
@@ -294,7 +294,7 @@ const CODE = "https://github.com/xprsayeem/boc-economics-dbt";
           <figure class="rounded-lg border border-white/10 overflow-hidden bg-black/20">
             <img src="/boc-airflow-run.png" alt="A successful boc_pipeline DAG run in Airflow" class="w-full block" loading="lazy" />
             <figcaption class="text-[11px] text-neutral-400 px-3 py-2 border-t border-white/10">
-              A successful <code class="bg-neutral-800 px-1 rounded text-[10px]">boc_pipeline</code> run — both tasks green on the daily schedule.
+              A successful <code class="bg-neutral-800 px-1 rounded text-[10px]">boc_pipeline</code> run, both tasks green on the daily schedule.
             </figcaption>
           </figure>
         </div>
