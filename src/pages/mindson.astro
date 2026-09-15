@@ -15,11 +15,7 @@ import Card from "../components/Card/index.astro";
     [
       cards,
       { y: ["40%", "0%"], opacity: [0, 1] },
-      {
-        type: "spring",
-        at: "-0.1",
-        delay: stagger(0.3),
-      },
+      { type: "spring", at: "-0.1", delay: stagger(0.3) },
     ],
   ];
 
@@ -27,10 +23,10 @@ import Card from "../components/Card/index.astro";
 </script>
 
 <Layout
-  title="Minds-On Data Architecture"
-  description="Full-stack data platform for youth program management."
+  title="Minds-On — Data Platform & Digital Growth Engine"
+  description="A full data platform and digital growth engine for a Whitby youth organization: a relational Airtable architecture unified into BigQuery, wired to GA4/GTM, offline conversion tracking, SEO, paid media, and live Looker Studio dashboards."
   showLoader>
-    
+
   <main class="text-white m-auto p-2 max-w-6xl overflow-visible relative w-full sm:p-4 md:p-6 lg:p-8 space-y-8">
     <!-- Top nav: Back -->
     <nav class="w-full sticky top-0 z-40 mb-3">
@@ -46,295 +42,374 @@ import Card from "../components/Card/index.astro";
       </div>
     </nav>
 
-    <section class="!h-auto !overflow-visible  space-y-6">
-      <!-- Hero Card -->
-      <Card title="Data Architecture for Minds-On Youth Organization" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+    <section class="!h-auto !overflow-visible space-y-6">
+
+      <!-- ============ HERO ============ -->
+      <Card title="Minds-On — Data Platform & Digital Growth Engine" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
         <div class="flex flex-col gap-6">
-          
           <div class="space-y-2">
-            <p class="text-sm text-neutral-300 leading-relaxed mt-2">
-              Minds-On is a Whitby-based youth organization providing educational programs, recreational activities, and community events to over 1,000 students annually. I had the opportunity to design and develop a full-stack data platform to replace their disconnected spreadsheets and manual processes.
-            </p>
-
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="rounded-full bg-sky-500/15 border border-sky-500/30 text-sky-200 text-[11px] px-2.5 py-0.5">Aug 2025 – Present</span>
+              <span class="rounded-full bg-white/5 border border-white/10 text-neutral-300 text-[11px] px-2.5 py-0.5">Whitby, ON youth organization</span>
+            </div>
+            <p class="text-lg font-medium text-neutral-100 mt-1">One source of truth, and a growth engine on top of it.</p>
             <p class="text-sm text-neutral-300 leading-relaxed">
-              The solution: a 5-base relational architecture built in Airtable with automated registration sync, real-time validation, and integrated reporting workflows. The system handles several complex relationships: students attending multiple programs, programs requiring multiple staff, events involving dozens of vendors, all while remaining accessible to non-technical staff.
-            </p>
-
-            <p class="text-sm text-neutral-300 leading-relaxed">
-              The platform eliminated manual data entry for 100+ weekly enrollments, reduced administrative communication time by 60%, and enabled real-time visibility into enrollment, attendance, and resource allocation across 20+ programs.
+              I lead the data and growth infrastructure for a Whitby-based youth organization serving
+              <strong class="text-white">1,000+ students across 20+ programs</strong>. The work spans two halves that feed each
+              other: a <strong class="text-white">relational data platform</strong> that replaced disconnected spreadsheets with
+              validated, connected data unified in <strong class="text-white">BigQuery</strong>, and a
+              <strong class="text-white">digital growth engine</strong> — GA4/GTM tracking, offline conversion feedback, SEO, paid
+              media, and live dashboards — that turns that clean data into enrollments. I act as the point of contact for
+              leadership across the whole program.
             </p>
           </div>
 
-          <!-- Expandable How it works -->
-          <details class="mt-1 cursor-pointer">
-            <summary class="font-semibold text-neutral-200 hover:text-sky-300 transition-colors list-none cursor-pointer select-none">
-              🔧 How it works <span class="text-xs text-neutral-400">(click to expand)</span>
-            </summary>
-            
-            <div class="mt-4 space-y-6 pl-4 border-l-2 border-neutral-700">
-              
-              <!-- The Problem -->
-              <div class="space-y-2">
-                <h4 class="text-base font-semibold text-neutral-100">The Problem</h4>
-                <p class="text-neutral-300 leading-relaxed">
-                  Before this project, Minds-On managed enrollment, attendance, and event logistics using 
-                  <strong class="text-white">disconnected google spreadsheets</strong> and manual data entry. This led to 
-                  duplicate records, data inconsistencies, and significant administrative overhead. Staff spent hours 
-                  each week copying information between systems, and there was no real-time visibility into program capacity or attendance trends.
-                </p>
-              </div>
-
-              <!-- Data Architecture -->
-              <div class="space-y-2">
-                <h4 class="text-base font-semibold text-neutral-100">Data Architecture</h4>
-                <p class="text-neutral-300 leading-relaxed">
-                  I designed a <strong class="text-white">5-base relational architecture</strong> in Airtable:
-                </p>
-                <ul class="list-disc list-inside text-neutral-300 space-y-1 pl-4 text-sm">
-                  <li><strong class="text-sky-300">Students</strong> – Core records with personal info, school details, medical/dietary notes, parent/guardian contact information</li>
-                  <li><strong class="text-sky-300">Attendance</strong> – Junction table linking students to programs and events with check-in/out times and session notes</li>
-                  <li><strong class="text-sky-300">Programs</strong> – Recurring activities like tutoring, sports nights, movie nights, workshops with capacity, scheduling, and resource tracking</li>
-                  <li><strong class="text-sky-300">Staff</strong> – Full-time employees, volunteers, student leaders with certifications, availability, and assignments</li>
-                  <li><strong class="text-sky-300">Events</strong> – Large community events with sub-tables for budget tracking, vendor management, sponsor outreach, and marketing</li>
-                </ul>
-                <p class="text-neutral-300 leading-relaxed mt-2">
-                  Record linkage and validation checks ensure data integrity across all bases, eliminating the duplicate records that plagued the previous spreadsheet system.
-                </p>
-              </div>
-
-              <!-- Automation Layer -->
-              <div class="space-y-2">
-                <h4 class="text-base font-semibold text-neutral-100">Automation Layer</h4>
-                <p class="text-neutral-300 leading-relaxed">
-                  Three technologies power the automation:
-                </p>
-                <ul class="list-disc list-inside text-neutral-300 space-y-1 pl-4 text-sm">
-                  <li>
-                    <strong class="text-sky-300">JavaScript + Airtable API</strong> – Syncs registration form submissions to the database in real-time, performing data validation, deduplication, and record enrichment. Handles 100+ weekly enrollments with zero manual entry.
-                  </li>
-                  <li>
-                    <strong class="text-sky-300">Python ETL Scripts</strong> – Joins attendance and enrollment data across bases to generate reporting dashboards. Calculates metrics like program utilization, attendance rates, and staff hours.
-                  </li>
-                  <li>
-                    <strong class="text-slate-300">Zapier Workflows</strong> – Automates email notifications, SMS alerts, calendar updates, and status changes. Reduced admin communication time by 60%.
-                  </li>
-                </ul>
-              </div>
-
-              <!-- User Interfaces -->
-              <div class="space-y-2">
-                <h4 class="text-base font-semibold text-neutral-100">User Interfaces</h4>
-                <p class="text-neutral-300 leading-relaxed">
-                  The system serves three distinct user groups:
-                </p>
-                <ul class="list-disc list-inside text-neutral-300 space-y-1 pl-4 text-sm">
-                  <li><strong class="text-white">Airtable Forms</strong> – Public-facing registration for parents enrolling children in programs</li>
-                  <li><strong class="text-white">Airtable Interface</strong> – Admin portal for staff to manage attendance, track programs, and coordinate events</li>
-                  <li><strong class="text-white">Glide App</strong> – Mobile-friendly parent portal for viewing attendance history and program schedules</li>
-                </ul>
-              </div>
-
-              <!-- Closing -->
-              <p class="text-neutral-300 leading-relaxed font-medium border-t border-neutral-700 pt-4">
-                The result of all this is a unified data platform where <strong class="text-sky-300">every enrollment, attendance record, and staff assignment flows through validated, connected bases,</strong> giving the team at Minds-On actionable visibility into their operations.
-              </p>
-
+          <!-- Headline stat tiles -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+              <div class="text-2xl font-bold text-sky-300">1,000+</div>
+              <div class="text-[11px] text-neutral-400">students across 20+ programs</div>
             </div>
-          </details>
-
-          <!-- Impact Metrics Callout -->
-          <section class="rounded-xl bg-gradient-to-br from-sky-950/30 to-slate-950/30 border border-sky-500/20 p-6">
-            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-              Impact
-            </h3>
-            
-            <div class="grid gap-4 md:grid-cols-3">
-              
-              <div class="space-y-2">
-                <div class="flex items-start gap-2">
-                  <span class="text-xl flex-shrink-0">⚡</span>
-                  <div>
-                    <h4 class="font-semibold text-neutral-100 text-sm">100+ weekly enrollments</h4>
-                    <p class="text-xs text-neutral-300 leading-relaxed">
-                      Processed automatically with zero manual data entry. Form submissions sync directly to the database.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="space-y-2">
-                <div class="flex items-start gap-2">
-                  <span class="text-xl flex-shrink-0">👥</span>
-                  <div>
-                    <h4 class="font-semibold text-neutral-100 text-sm">1,000+ students tracked</h4>
-                    <p class="text-xs text-neutral-300 leading-relaxed">
-                      Complete enrollment and attendance history across 20+ programs, enabling staff to monitor program capacity and activity.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="space-y-2">
-                <div class="flex items-start gap-2">
-                  <span class="text-xl flex-shrink-0">⏱️</span>
-                  <div>
-                    <h4 class="font-semibold text-neutral-100 text-sm">60% reduction in admin time</h4>
-                    <p class="text-xs text-neutral-300 leading-relaxed">
-                      Automated notifications, status updates, and report generation freed staff to focus on programs instead of paperwork.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
+            <div class="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+              <div class="text-2xl font-bold text-sky-300">100+</div>
+              <div class="text-[11px] text-neutral-400">weekly registrations synced</div>
             </div>
-          </section>
-
+            <div class="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+              <div class="text-2xl font-bold text-sky-300">70%</div>
+              <div class="text-[11px] text-neutral-400">less manual data processing</div>
+            </div>
+            <div class="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+              <div class="text-2xl font-bold text-sky-300">30%</div>
+              <div class="text-[11px] text-neutral-400">fewer data errors</div>
+            </div>
+          </div>
         </div>
       </Card>
 
-      <!-- ERD Diagram Card -->
-      <Card rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
-        <section class="flex flex-col gap-3">
-          <h3 class="font-semibold text-neutral-200">Data Model</h3>
-          <p class="text-xs text-neutral-400">
-            Entity Relationship Diagram showing the 5-base relational architecture. 
-            <strong class="text-neutral-300">Attendance</strong> serves as the junction table, linking students to both programs and events. 
-            Staff assignments connect to both Programs and Events bases, enabling flexible resource allocation.
+      <!-- ============ THE ENGAGEMENT ============ -->
+      <Card title="The engagement" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="flex flex-col gap-4">
+          <p class="text-sm text-neutral-300 leading-relaxed">
+            I started by running <strong class="text-white">requirements gathering with 10+ staff</strong> — stakeholder
+            interviews and process mapping — to map how data, enrollment, and marketing actually flowed through the
+            organization, and where it broke. That surfaced two connected problems: operational data was scattered across
+            disconnected spreadsheets, and marketing had no reliable line of sight into what was actually driving enrollment.
+            The build addresses both as one system.
           </p>
-          
-          <div class="rounded-xl bg-white/5 border border-white/10 p-4 overflow-x-auto">
-            <img 
-              src="/mindson-erd.png" 
+
+          <div class="grid gap-3 sm:grid-cols-2">
+            <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+              <div class="text-2xl mb-2">🗄️</div>
+              <h4 class="text-sm font-semibold text-neutral-100 mb-1">The data platform</h4>
+              <p class="text-[11px] text-neutral-400 leading-relaxed">
+                A relational Airtable architecture with automated intake, validation, and Python ETL — migrated into
+                BigQuery as a central warehouse and modeled into clean layers.
+              </p>
+            </div>
+            <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+              <div class="text-2xl mb-2">📈</div>
+              <h4 class="text-sm font-semibold text-neutral-100 mb-1">The growth engine</h4>
+              <p class="text-[11px] text-neutral-400 leading-relaxed">
+                GA4/GTM tracking, offline conversion feedback, SEO, and paid media across Google, Meta, and LinkedIn —
+                all reporting back through the same warehouse.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <!-- ============ SYSTEM OVERVIEW (replaces old architecture diagram) ============ -->
+      <Card title="How it fits together" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="flex flex-col gap-5">
+          <p class="text-sm text-neutral-300 leading-relaxed">
+            Operational, marketing, and CRM data land in <strong class="text-white">BigQuery</strong> as a single source of
+            truth. Validated enrollments don't just sit there — they flow back out to the ad platforms as offline
+            conversions, so acquisition spend is optimized against <strong class="text-white">real</strong> enrollments, not
+            just form fills.
+          </p>
+
+          <!-- Full-system flow diagram -->
+          <div class="rounded-xl bg-black/20 border border-white/10 p-4 sm:p-5">
+            <div class="flex flex-col items-stretch gap-2">
+
+              <!-- Sources -->
+              <div class="text-[11px] uppercase tracking-wider text-neutral-500 text-center">Sources</div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 items-stretch">
+                <div class="rounded-lg bg-white/5 border border-white/10 px-3 py-3">
+                  <div class="flex items-center gap-2"><span>📝</span><span class="text-sm font-semibold text-neutral-100">Intake forms</span></div>
+                  <div class="text-[11px] text-neutral-400 mt-1">Registrations & landing-page leads</div>
+                </div>
+                <div class="rounded-lg bg-white/5 border border-white/10 px-3 py-3">
+                  <div class="flex items-center gap-2"><span>📣</span><span class="text-sm font-semibold text-neutral-100">Marketing</span></div>
+                  <div class="text-[11px] text-neutral-400 mt-1">GA4, Google/Meta/LinkedIn Ads, Search Console</div>
+                </div>
+                <div class="rounded-lg bg-white/5 border border-white/10 px-3 py-3">
+                  <div class="flex items-center gap-2"><span>🗂️</span><span class="text-sm font-semibold text-neutral-100">Airtable + CRM</span></div>
+                  <div class="text-[11px] text-neutral-400 mt-1">Operational system of record</div>
+                </div>
+              </div>
+              <div class="text-center text-neutral-600 text-lg leading-none">↓</div>
+
+              <!-- Airtable layer -->
+              <div class="rounded-lg bg-white/5 border border-white/10 px-4 py-3 flex items-center gap-3">
+                <span class="text-xl">⚙️</span>
+                <div>
+                  <div class="text-sm font-semibold text-neutral-100">Automation layer <span class="text-[11px] font-normal text-neutral-400">(JavaScript + Python ETL)</span></div>
+                  <div class="text-[11px] text-neutral-400">Sync, validate & deduplicate on the way in; aggregate across bases</div>
+                </div>
+              </div>
+              <div class="text-center text-neutral-600 text-lg leading-none">↓</div>
+
+              <!-- Warehouse -->
+              <div class="rounded-lg bg-sky-950/30 border border-sky-500/30 px-4 py-3 flex items-center gap-3">
+                <span class="text-xl">🏛️</span>
+                <div>
+                  <div class="text-sm font-semibold text-sky-200">BigQuery warehouse</div>
+                  <div class="text-[11px] text-neutral-400">Staging → reporting layers, joining operational + marketing + CRM into one source of truth</div>
+                </div>
+              </div>
+
+              <!-- Two outputs -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 items-stretch mt-1">
+                <div class="flex flex-col items-center gap-1">
+                  <div class="text-neutral-600 text-lg leading-none">↓</div>
+                  <div class="rounded-lg bg-sky-950/30 border border-sky-500/30 px-3 py-3 w-full">
+                    <div class="flex items-center gap-2"><span>📊</span><span class="text-sm font-semibold text-sky-200">Looker Studio</span></div>
+                    <div class="text-[11px] text-neutral-400 mt-1">Live dashboards + automated weekly leadership summaries</div>
+                  </div>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                  <div class="text-neutral-600 text-lg leading-none">↑</div>
+                  <div class="rounded-lg bg-sky-950/30 border border-sky-500/30 px-3 py-3 w-full">
+                    <div class="flex items-center gap-2"><span>🔁</span><span class="text-sm font-semibold text-sky-200">Offline conversions</span></div>
+                    <div class="text-[11px] text-neutral-400 mt-1">Validated enrollments feed back to Google Ads & Meta for smarter bidding</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <!-- ============ DATA ARCHITECTURE ============ -->
+      <Card title="Relational data architecture" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="flex flex-col gap-4">
+          <p class="text-sm text-neutral-300 leading-relaxed">
+            The operational core is a <strong class="text-white">5-base relational architecture</strong> in Airtable, with
+            ERD documentation, metadata definitions, and validation rules that keep data clean at the source.
+            <strong class="text-white">Attendance</strong> is the junction table, linking students to both programs and events.
+          </p>
+
+          <ul class="list-disc list-inside text-neutral-300 space-y-1 pl-4 text-sm">
+            <li><strong class="text-sky-300">Students</strong> — core records: personal info, school details, medical/dietary notes, guardian contacts</li>
+            <li><strong class="text-sky-300">Attendance</strong> — junction table linking students to programs and events with check-in/out times</li>
+            <li><strong class="text-sky-300">Programs</strong> — recurring activities with capacity, scheduling, and resource tracking</li>
+            <li><strong class="text-sky-300">Staff</strong> — full-time, volunteers, and student leaders with certifications, availability, and assignments</li>
+            <li><strong class="text-sky-300">Events</strong> — community events with budget, vendor, sponsor, and marketing sub-tables</li>
+          </ul>
+
+          <figure class="rounded-xl bg-white/5 border border-white/10 p-4 overflow-x-auto">
+            <img
+              src="/mindson-erd.png"
               alt="Minds-On Entity Relationship Diagram showing Students, Attendance, Programs, Staff, and Events bases with their relationships"
               class="w-full h-auto min-w-[600px]"
               loading="lazy"
             />
-          </div>
-        </section>
+            <figcaption class="text-[11px] text-neutral-400 mt-2">
+              The 5-base relational model. Attendance links students to both programs and events; staff assignments span both.
+            </figcaption>
+          </figure>
+        </div>
       </Card>
 
-      <!-- System Architecture Card -->
-      <Card rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
-        <section class="flex flex-col gap-3">
-          <h3 class="font-semibold text-neutral-200">System Architecture</h3>
-          <p class="text-xs text-neutral-400">
-            Full-stack data system across 4 layers: User Interface (Airtable Forms, Admin Interface, Glide App), 
-            Application Logic & Automation (JavaScript, Python, Zapier), Data Storage (5 Airtable bases), 
-            and Analytics & Reporting (dashboards, reports, automated notifications).
+      <!-- ============ AUTOMATION & ETL ============ -->
+      <Card title="Automation & ETL" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="grid gap-3 md:grid-cols-2">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <div class="text-2xl mb-2">🔄</div>
+            <h4 class="text-sm font-semibold text-neutral-100 mb-1">Registration sync (JavaScript)</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed">
+              JavaScript automations sync <strong class="text-neutral-200">100+ weekly registrations</strong> from intake
+              forms straight into the database, with validation and deduplication so bad or duplicate records never land.
+            </p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <div class="text-2xl mb-2">🐍</div>
+            <h4 class="text-sm font-semibold text-neutral-100 mb-1">Cross-base aggregation (Python)</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed">
+              Python ETL scripts aggregate attendance and enrollment data <strong class="text-neutral-200">across
+              bases</strong>, producing the joined tables that feed the warehouse and reporting layers.
+            </p>
+          </div>
+        </div>
+      </Card>
+
+      <!-- ============ MEASUREMENT & GROWTH ============ -->
+      <Card title="Measurement & conversion tracking" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="flex flex-col gap-4">
+          <p class="text-sm text-neutral-300 leading-relaxed">
+            I rebuilt tracking on <strong class="text-white">GA4 and Google Tag Manager</strong> with a clean event and
+            conversion taxonomy, then closed the loop with offline conversion tracking so ad platforms optimize against
+            outcomes that are actually real.
           </p>
-          
-          <div class="rounded-xl bg-white/5 border border-white/10 p-4 flex justify-center overflow-x-auto">
-            <img 
-              src="/mindson-architecture.png" 
-              alt="Minds-On System Architecture showing 4-layer data platform with user interfaces, automation, storage, and analytics"
-              class="h-auto max-w-full md:max-w-2xl"
-              loading="lazy"
-            />
-          </div>
 
-          <!-- Workflow Examples -->
-          <div class="grid gap-3 md:grid-cols-3 mt-2">
-            <div class="rounded-lg bg-sky-950/20 border border-sky-500/20 p-3">
-              <div class="flex items-center gap-2 mb-1">
-                <div class="w-3 h-3 rounded-full bg-sky-400"></div>
-                <h4 class="text-xs font-semibold text-sky-300">Form Submission</h4>
+          <div class="grid gap-3 sm:grid-cols-2">
+            <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+              <h4 class="text-sm font-semibold text-neutral-100 mb-2">Conversion taxonomy</h4>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-200 px-2 py-1 text-[11px]">Enrollment</span>
+                <span class="rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-200 px-2 py-1 text-[11px]">Event RSVP</span>
+                <span class="rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-200 px-2 py-1 text-[11px]">Sponsor inquiry</span>
+                <span class="rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-200 px-2 py-1 text-[11px]">Donation</span>
               </div>
-              <p class="text-xs text-neutral-400 leading-relaxed">
-                Parent submits registration → JavaScript validates & deduplicates → Record created in Students base → Confirmation email sent via Zapier
-              </p>
             </div>
-
-            <div class="rounded-lg bg-sky-950/20 border border-sky-500/20 p-3">
-              <div class="flex items-center gap-2 mb-1">
-                <div class="w-3 h-3 rounded-full bg-sky-400"></div>
-                <h4 class="text-xs font-semibold text-sky-300">Staff Marks Attendance</h4>
-              </div>
-              <p class="text-xs text-neutral-400 leading-relaxed">
-                Staff checks in student → Attendance record created with timestamp → Program capacity updates in real-time → Parent notified of check-in
-              </p>
-            </div>
-
-            <div class="rounded-lg bg-sky-950/20 border border-sky-500/20 p-3">
-              <div class="flex items-center gap-2 mb-1">
-                <div class="w-3 h-3 rounded-full bg-sky-400"></div>
-                <h4 class="text-xs font-semibold text-sky-300">Reports to Leadership</h4>
-              </div>
-              <p class="text-xs text-neutral-400 leading-relaxed">
-                Python extracts attendance data → Joins with enrollment records → Calculates metrics → Dashboard updates → Weekly summary emailed to leadership
+            <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+              <h4 class="text-sm font-semibold text-neutral-100 mb-1">Offline conversion feedback</h4>
+              <p class="text-[11px] text-neutral-400 leading-relaxed">
+                Validated enrollments feed back into <strong class="text-neutral-200">Google Ads and Meta</strong>, so
+                bidding is driven by confirmed enrollments — not raw form fills that may never convert.
               </p>
             </div>
           </div>
-        </section>
+        </div>
       </Card>
 
-      <!-- Key Features Card -->
-      <Card rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
-        <section class="flex flex-col gap-3">
-          <h3 class="font-semibold text-neutral-200">Key Features</h3>
-          
-          <div class="grid gap-3 md:grid-cols-2">
-            
-            <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-              <div class="flex items-start gap-3">
-                <span class="text-2xl">🔄</span>
-                <div>
-                  <h4 class="font-semibold text-neutral-100 text-sm mb-1">Real-time Sync</h4>
-                  <p class="text-xs text-neutral-400 leading-relaxed">
-                    Registration forms sync instantly to the database via JavaScript automation. No manual copy-paste, no delays, no data entry errors.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-              <div class="flex items-start gap-3">
-                <span class="text-2xl">✅</span>
-                <div>
-                  <h4 class="font-semibold text-neutral-100 text-sm mb-1">Validation & Deduplication</h4>
-                  <p class="text-xs text-neutral-400 leading-relaxed">
-                    Automated checks catch invalid data and prevent duplicate records. Record linkage ensures referential integrity across all 5 bases.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-              <div class="flex items-start gap-3">
-                <span class="text-2xl">📊</span>
-                <div>
-                  <h4 class="font-semibold text-neutral-100 text-sm mb-1">Automated Reporting</h4>
-                  <p class="text-xs text-neutral-400 leading-relaxed">
-                    Python scripts join data across bases to generate attendance reports, capacity dashboards, and trend analysis for leadership.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-              <div class="flex items-start gap-3">
-                <span class="text-2xl">📧</span>
-                <div>
-                  <h4 class="font-semibold text-neutral-100 text-sm mb-1">Smart Notifications</h4>
-                  <p class="text-xs text-neutral-400 leading-relaxed">
-                    Zapier workflows trigger emails, SMS alerts, and calendar invites based on database events; enrollment confirmations, schedule changes, sign-up reminders.
-                  </p>
-                </div>
-              </div>
-            </div>
-
+      <!-- ============ ACQUISITION ============ -->
+      <Card title="Acquisition: SEO, paid media & landing pages" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="grid gap-3 md:grid-cols-3">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <div class="text-2xl mb-2">🔍</div>
+            <h4 class="text-sm font-semibold text-neutral-100 mb-1">Technical & local SEO</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed">
+              Site speed, structured data for programs and events, schema, Google Business Profile, and keyword mapping for
+              <strong class="text-neutral-200">Durham Region intent</strong> — improving organic visibility for the searches
+              that drive enrollment.
+            </p>
           </div>
-        </section>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <div class="text-2xl mb-2">🎯</div>
+            <h4 class="text-sm font-semibold text-neutral-100 mb-1">Paid media</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed">
+              Google Ads (search + Performance Max), Meta, and LinkedIn, segmented by
+              <strong class="text-neutral-200">program, enrollment season, and sponsor outreach</strong>. On-brand creative
+              built with a designer and tested at the ad level.
+            </p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <div class="text-2xl mb-2">🧪</div>
+            <h4 class="text-sm font-semibold text-neutral-100 mb-1">Landing pages</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed">
+              Per-program and per-event landing pages, A/B tested, with form submissions wired into the existing validation
+              layer — so marketing leads stay <strong class="text-neutral-200">clean</strong> end to end.
+            </p>
+          </div>
+        </div>
       </Card>
 
-      <!-- Tech Stack -->
-      <div class="mt-2 flex flex-wrap gap-2">
-        <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">Airtable</span>
-        <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">JavaScript</span>
-        <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">Python</span>
-        <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">Zapier</span>
-        <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">Glide</span>
-        <span class="rounded-xl bg-white/10 px-3 py-1 text-xs">Airtable API</span>
-      </div>
+      <!-- ============ REPORTING & DELIVERY ============ -->
+      <Card title="Reporting, leadership & delivery" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="flex flex-col gap-4">
+          <div class="space-y-2">
+            <h4 class="text-sm font-semibold text-neutral-100">Live dashboards on BigQuery</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed">
+              Looker Studio dashboards read directly from the warehouse, with automated weekly summaries emailed to leadership.
+            </p>
+            <div class="flex flex-wrap gap-1.5 mt-1">
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Enrollment funnel</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Channel efficiency</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">SEO</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Event performance</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Sponsor pipeline</span>
+            </div>
+          </div>
+
+          <div class="grid gap-3 sm:grid-cols-2">
+            <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+              <div class="text-2xl mb-2">🤝</div>
+              <h4 class="text-sm font-semibold text-neutral-100 mb-1">Point of contact for leadership</h4>
+              <p class="text-[11px] text-neutral-400 leading-relaxed">
+                Performance reviews, next-step recommendations, and proactive flags on under-enrolling programs.
+              </p>
+            </div>
+            <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+              <div class="text-2xl mb-2">🗂️</div>
+              <h4 class="text-sm font-semibold text-neutral-100 mb-1">Program management in Asana</h4>
+              <p class="text-[11px] text-neutral-400 leading-relaxed">
+                A Gantt view across seasons, campaigns, content, and events — plus staff training for long-term adoption.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <!-- ============ IMPACT ============ -->
+      <Card title="Impact" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="rounded-xl bg-gradient-to-br from-sky-950/30 to-slate-950/30 border border-sky-500/20 p-5 text-center">
+            <div class="text-3xl font-bold text-sky-300">70%</div>
+            <h4 class="font-semibold text-neutral-100 text-sm mt-1">Less manual processing</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed mt-1">
+              Automated sync and ETL replaced hours of weekly copy-paste between systems.
+            </p>
+          </div>
+          <div class="rounded-xl bg-gradient-to-br from-sky-950/30 to-slate-950/30 border border-sky-500/20 p-5 text-center">
+            <div class="text-3xl font-bold text-sky-300">30%</div>
+            <h4 class="font-semibold text-neutral-100 text-sm mt-1">Fewer data errors</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed mt-1">
+              Validation and deduplication at intake eliminated the duplicates and inconsistencies of the old system.
+            </p>
+          </div>
+          <div class="rounded-xl bg-gradient-to-br from-sky-950/30 to-slate-950/30 border border-sky-500/20 p-5 text-center">
+            <div class="text-3xl font-bold text-sky-300">1</div>
+            <h4 class="font-semibold text-neutral-100 text-sm mt-1">Unified warehouse</h4>
+            <p class="text-[11px] text-neutral-400 leading-relaxed mt-1">
+              Operational and marketing reporting merged into a single source of truth in BigQuery.
+            </p>
+          </div>
+        </div>
+      </Card>
+
+      <!-- ============ TECH STACK ============ -->
+      <Card title="The stack" rowSpan="lg:row-span-8 md:row-span-6" colSpan="lg:col-span-2">
+        <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <h4 class="text-xs font-semibold text-sky-300 mb-2 uppercase tracking-wider">Data & warehouse</h4>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Airtable</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">BigQuery</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Python</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">JavaScript</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Zapier</span>
+            </div>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <h4 class="text-xs font-semibold text-sky-300 mb-2 uppercase tracking-wider">Analytics & tracking</h4>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">GA4</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Google Tag Manager</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Search Console</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Looker Studio</span>
+            </div>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <h4 class="text-xs font-semibold text-sky-300 mb-2 uppercase tracking-wider">Paid & growth</h4>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Google Ads</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Meta Ads</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">LinkedIn Ads</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">SEO</span>
+            </div>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <h4 class="text-xs font-semibold text-sky-300 mb-2 uppercase tracking-wider">Ops & PM</h4>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Asana</span>
+              <span class="rounded-lg bg-white/10 px-2 py-1 text-[11px]">Glide</span>
+            </div>
+          </div>
+        </div>
+      </Card>
 
     </section>
   </main>
